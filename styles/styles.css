@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "KulimPark";
+  src: url("/public/assets/fonts/Kulim_Park/KulimPark-Bold.ttf");
+  font-style: bold;
+  font-weight: 700;
+  font-display: swap;
+}
+
+.header {
+  background: linear-gradient(180deg, rgba(255, 48, 48, 0.8) 0, #ff8787);
+}
+
+.container {
+  max-width: 1440px;
+}
