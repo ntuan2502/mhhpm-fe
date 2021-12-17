@@ -6,7 +6,9 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
-      KulimPark: ["KulimPark"],
+      Kulim_Park_Bold: ["Kulim_Park_Bold"],
+      Kulim_Park_Normal: ["Kulim_Park_Normal"],
+      Harlow_Solid_Italic: ["Harlow_Solid_Italic"],
     },
   },
   variants: {

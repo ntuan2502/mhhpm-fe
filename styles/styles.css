@@ -3,11 +3,30 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "KulimPark";
-  src: url("/public/assets/fonts/Kulim_Park/KulimPark-Bold.ttf");
+  font-family: "Kulim_Park_Bold";
+  src: url("/assets/fonts/Kulim_Park/KulimPark-Bold.ttf");
   font-style: bold;
   font-weight: 700;
   font-display: swap;
+}
+
+@font-face {
+  font-family: "Kulim_Park_Normal";
+  src: url("/assets/fonts/Kulim_Park/KulimPark-Regular.ttf");
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Harlow_Solid_Italic";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/assets/fonts/Harlow/HARLOWSI_1.woff") format("woff");
+}
+
+:root {
+  --primary-color: #e87171;
 }
 
 .header {
@@ -16,4 +35,15 @@
 
 .container {
   max-width: 1440px;
+}
+
+.footer__text--bg {
+  background: #e0e0e0;
+}
+.footer__text--color {
+  color: #616161;
+}
+
+.btn {
+  background-color: var(--primary-color);
 }
