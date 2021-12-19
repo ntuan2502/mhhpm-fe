@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 export default function Header() {
   return (
     <header className="header w-full h-60 py-6 font-Kulim_Park_Bold">
-      <div className="container m-auto px-16 grid grid-cols-12 items-center gap-5 -translate-y-3 ">
+      <div className="container m-auto grid grid-cols-12 items-center gap-5 -translate-y-3 ">
         {/* logo */}
 
         <Link href="/">

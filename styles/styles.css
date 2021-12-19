@@ -33,6 +33,84 @@
   background: linear-gradient(180deg, rgba(255, 48, 48, 0.8) 0, #ff8787);
 }
 
+.index-banner {
+  background: linear-gradient(#ff8787, #ffff);
+}
+
+.banner {
+  height: 480px;
+}
+
+.banner__introduce {
+  /* background-image: url("/assets/img/bus.png"); */
+  /* background-repeat: no-repeat; */
+}
+
+.banner__introduce-text {
+  width: 426px;
+  /* height: 376px; */
+}
+
+.banner__slider {
+  width: 650px;
+  height: 420px;
+  position: relative;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  /* background: #fff; */
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  /* -webkit-align-items: center; */
+  /* align-items: center; */
+}
+
+.swiper-pagination-bullet {
+  margin-right: 20px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: #f04239 !important;
+  position: relative;
+}
+
+.swiper-pagination-bullet-active::after {
+  position: absolute;
+  /* background: black; */
+  border-radius: 50%;
+  border: 2px solid #f04239;
+  bottom: 50%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  content: " ";
+  width: 27px;
+  height: 27px;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .container {
   max-width: 1440px;
 }

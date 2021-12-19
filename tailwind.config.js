@@ -4,7 +4,12 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
 
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "white-rgba": "rgba(255,255,255,0.9)",
+      },
+    },
+
     fontFamily: {
       Kulim_Park_Bold: ["Kulim_Park_Bold"],
       Kulim_Park_Normal: ["Kulim_Park_Normal"],
@@ -14,5 +19,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };
