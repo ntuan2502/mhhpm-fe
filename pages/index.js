@@ -3,8 +3,22 @@ import Link from "next/link";
 import Slider from "../components/index/Slider";
 import { useState } from "react";
 import { useEffect } from "react";
+import ScrollMenu from "./../components/index/ScrollMenu";
+import axios from "axios";
+import EventBar from "./../components/EventBar";
 
-export default function Home() {
+export const getStaticProps = async () => {
+  const res = await axios.get(
+    "https://jsonplaceholder.typicode.com/photos?_limit=8"
+  );
+  const data = await res.data;
+  // console.log(data);
+  return {
+    props: { foods: data },
+  };
+};
+
+export default function Home({ foods }) {
   const [sliderImage, setSliderImage] = useState([]);
   useEffect(() => {
     const slider1 = "/assets/img/slider1.png";
@@ -19,11 +33,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="index-banner font-Kulim_Park_Normal">
+      <div className="index__banner font-Kulim_Park_Normal">
         <div className=" banner grid grid-cols-12 container m-auto gap-5">
           <div className="banner__introduce col-span-5 flex items-end relative">
             <Image src="/assets/img/bus.png" width={530} height="400"></Image>
-            <span className=" rounded-sm absolute top-0 right-0 bg-white-rgba px-6 py-10  banner__introduce-text font-Kulim_Park_Bold text-center ">
+            <span className=" rounded-sm absolute top-6 right-0 bg-white-rgba px-6 py-10  banner__introduce-text font-Kulim_Park_Bold text-center ">
               <div className="text-center mb-6 mx-auto">
                 <h1 className=" text-5xl mb-2">Super voucher</h1>
                 <h1 className=" text-5xl text-right  ">in now</h1>
@@ -46,6 +60,42 @@ export default function Home() {
           <div className=" col-span-7 pl-16">
             <Slider images={sliderImage} />
           </div>
+        </div>
+      </div>
+
+      <div className="index__menu mt-16 pt-8">
+        <ScrollMenu foods={foods} />
+      </div>
+
+      <EventBar></EventBar>
+
+      <div className="flex justify-between container mx-auto my-20 font-Kulim_Park_Normal px-12 py-4">
+        <div className="flex">
+          <Image src="/assets/img/quality.png" width={65} height={65}></Image>
+          <span className="ml-8">
+            <h3 className="text-lg font-bold ">High Quality</h3>
+            <p className="mt-4">crafted from top materials</p>
+          </span>
+        </div>
+
+        <div className="flex">
+          <Image
+            src="/assets/img/protection.png"
+            width={65}
+            height={65}
+          ></Image>
+          <span className="ml-8">
+            <h3 className="text-lg font-bold ">Warrany Protection</h3>
+            <p className="mt-4">Over 2 years</p>
+          </span>
+        </div>
+
+        <div className="flex">
+          <Image src="/assets/img/support.png" width={65} height={65}></Image>
+          <span className="ml-8">
+            <h3 className="text-lg font-bold ">24 / 7 Support</h3>
+            <p className="mt-4">Dedicated support</p>
+          </span>
         </div>
       </div>
     </>

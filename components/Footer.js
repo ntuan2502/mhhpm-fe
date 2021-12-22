@@ -10,7 +10,7 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 
 export default function Footer() {
   return (
-    <footer className="w-full  footer__text--bg  ">
+    <footer className="  footer__text--bg  ">
       <a
         href="#"
         className="text-white bg-black font-Harlow_Solid_Italic w-full h-28 flex items-center justify-center text-3xl"

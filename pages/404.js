@@ -7,6 +7,7 @@ export default function NotFound() {
   const router = useRouter();
   setInterval(() => {
     let temp = counter;
+    if (temp <= 0) return;
     setCounter(--temp);
   }, 1000);
 
@@ -17,7 +18,7 @@ export default function NotFound() {
   }, []);
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-center -translate-y-1/2">
+    <div className=" relative top-1/2 left-1/2 -translate-x-1/2 text-center">
       <h1 className="text-5xl font-bold">Page is still developing</h1>
       <h2 className="text-2xl mt-8">
         Redirect to

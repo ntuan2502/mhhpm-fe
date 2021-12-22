@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       colors: {
         "white-rgba": "rgba(255,255,255,0.9)",
+        "EEE-color": "#EEE",
+        "primary-color": "#FF8787",
+        "price-color": "#A90000",
       },
     },
 

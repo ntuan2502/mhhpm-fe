@@ -33,7 +33,7 @@
   background: linear-gradient(180deg, rgba(255, 48, 48, 0.8) 0, #ff8787);
 }
 
-.index-banner {
+.index__banner {
   background: linear-gradient(#ff8787, #ffff);
 }
 
@@ -55,6 +55,11 @@
   width: 650px;
   height: 420px;
   position: relative;
+}
+
+.index__menu {
+  background-color: white;
+  min-height: 200px;
 }
 
 .swiper {
@@ -115,6 +120,24 @@
   max-width: 1440px;
 }
 
+.event-image {
+  width: 508px;
+  height: 202px;
+  flex-shrink: 0;
+}
+
+.child {
+  width: 1500px;
+  cursor: grab;
+}
+.event-image img {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
 .footer__text--bg {
   background: #e0e0e0;
 }
@@ -122,6 +145,15 @@
   color: #616161;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 .btn {
   background-color: var(--primary-color);
 }
