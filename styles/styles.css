@@ -126,9 +126,8 @@
   flex-shrink: 0;
 }
 
-.child {
-  width: 1500px;
-  cursor: grab;
+.active {
+  color: #ffc700;
 }
 .event-image img {
   -webkit-user-select: none;

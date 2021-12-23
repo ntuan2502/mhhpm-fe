@@ -20,7 +20,7 @@ export default function ScrollMenu({ foods }) {
   };
 
   return (
-    <div className="container m-auto font-Kulim_Park_Normal text-center flex flex-col items-center">
+    <div className="container m-auto font-Kulim_Park_Normal text-center flex flex-col items-center mb-20">
       <h1 className="text-center text-4xl font-bold">HOT CHOICES</h1>
       <div className="grid grid-cols-12 gap-5 my-12 ">
         {props.map((prop) => (

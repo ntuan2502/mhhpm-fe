@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -8,13 +7,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Header() {
+  const router = useRouter();
+  const currentRoute = router.pathname;
+
   return (
     <header className="header w-full h-60 py-6 font-Kulim_Park_Bold">
       <div className="container m-auto grid grid-cols-12 items-center gap-5 -translate-y-3 ">
         {/* logo */}
 
         <Link href="/">
-          <a className="flex items-center col-span-2 translate-y-3 mr-auto ">
+          <a className="flex items-center col-span-2 translate-y-3 mr-auto">
             <Image src="/assets/img/Logo.png" width={158} height={172}></Image>
             {/* <h1 className="header__heading text-4xl font-bold text-red-500">
             EzOrder
@@ -26,18 +28,42 @@ export default function Header() {
         <ul className="flex  col-span-4 ml-3  ">
           <li className="header__nav-item">
             <Link href="/">
-              <a className="header__nav-link font-bold mr-12 text-3xl">Home</a>
+              <a
+                className={
+                  currentRoute === "/"
+                    ? "active header__nav-link font-bold mr-12 text-3xl"
+                    : "header__nav-link font-bold mr-12 text-3xl"
+                }
+              >
+                Home
+              </a>
             </Link>
           </li>
           <li className="header__nav-item">
             <Link href="/menu">
-              <a className="header__nav-link font-bold mr-12 text-3xl">Menu</a>
+              <a
+                className={
+                  currentRoute === "/menu"
+                    ? "active header__nav-link font-bold mr-12 text-3xl"
+                    : "header__nav-link font-bold mr-12 text-3xl"
+                }
+              >
+                Menu
+              </a>
             </Link>
           </li>
 
           <li className="header__nav-item">
             <Link href="/about">
-              <a className="header__nav-link font-bold text-3xl">About us</a>
+              <a
+                className={
+                  currentRoute === "/about"
+                    ? "active header__nav-link font-bold mr-12 text-3xl"
+                    : "header__nav-link font-bold mr-12 text-3xl"
+                }
+              >
+                About us
+              </a>
             </Link>
           </li>
         </ul>
