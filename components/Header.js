@@ -43,7 +43,7 @@ export default function Header() {
             <Link href="/menu">
               <a
                 className={
-                  currentRoute === "/menu"
+                  currentRoute.includes("/menu")
                     ? "active header__nav-link font-bold mr-12 text-3xl"
                     : "header__nav-link font-bold mr-12 text-3xl"
                 }

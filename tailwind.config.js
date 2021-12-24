@@ -14,14 +14,18 @@ module.exports = {
         "active-color": "#FFC700",
         "normal-button-color": "#B2B2B2",
         "category-color": "#CA283F",
-        "active-button-color": "#F86E67",
+        "active-button-color": "#F86E67!important",
         "navigation-button-bg-color": "#FFD0D0",
         "navigation-text-color": "#F04239",
+        "product-title-color": "#2E112F",
+        "cart-button-color": "#F1433A",
+        "border-color": "#e8e8e8",
       },
       fontFamily: {
         Kulim_Park_Bold: ["Kulim_Park_Bold"],
         Kulim_Park_Normal: ["Kulim_Park_Normal"],
         Harlow_Solid_Italic: ["Harlow_Solid_Italic"],
+        Haettenschweiler: ["Haettenschweiler"],
       },
       width: {
         "pagination-button-width": "50px",
@@ -29,6 +33,10 @@ module.exports = {
 
       height: {
         "pagination-button-height": "50px",
+      },
+
+      border: {
+        "border-1": "1px",
       },
     },
   },

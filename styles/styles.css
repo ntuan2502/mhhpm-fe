@@ -25,6 +25,13 @@
   src: url("/assets/fonts/Harlow/HARLOWSI_1.woff") format("woff");
 }
 
+@font-face {
+  font-family: "Haettenschweiler";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/assets/fonts/Haettenschweiler/Haettenschweiler-Regular.ttf");
+}
+
 :root {
   --primary-color: #e87171;
 }
@@ -155,4 +162,35 @@
 }
 .btn {
   background-color: var(--primary-color);
+}
+
+.product-label {
+  @apply p-4;
+}
+
+.product-label:nth-child(2n-1) {
+  background-color: #d6d6d6;
+}
+
+.product-label:nth-child(2n) {
+  background-color: #eaeaea;
+}
+
+.product-info {
+  @apply px-8 py-4;
+}
+.product-info:nth-child(2n-1) {
+  background-color: #eaeaea;
+}
+
+.product-info:nth-child(2n) {
+  background-color: #d6d6d6;
+}
+
+.user-rate {
+  @apply text-3xl !important;
+}
+
+.user-rate li {
+  margin: 0 !important;
 }
