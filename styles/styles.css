@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import "~react-image-gallery/styles/css/image-gallery.css";
 @font-face {
   font-family: "Kulim_Park_Bold";
   src: url("/assets/fonts/Kulim_Park/KulimPark-Bold.ttf");
@@ -194,3 +194,16 @@
 .user-rate li {
   margin: 0 !important;
 }
+/* .image-gallery-slides {
+  width: 500px;
+  height: 500px;
+} */
+
+.image-gallery-thumbnails-container {
+  margin-top: 20px;
+}
+
+/* .image-gallery-thumbnail {
+  width: 100px;
+  height: 100px;
+} */

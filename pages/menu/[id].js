@@ -1,5 +1,5 @@
 // Import-----------------------------
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import EventBar from "./../../components/EventBar";
 import axios from "axios";
@@ -14,7 +14,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import qs from "query-string";
-
+import ImageGallery from "react-image-gallery";
 import Comment from "./../../components/Details/Comment";
 import { useEffect } from "react";
 import Pagination from "react-js-pagination";
@@ -57,15 +57,47 @@ export const getStaticProps = async (context) => {
 export default function Details({ food, comments }) {
   // Variable
   const router = useRouter();
+  const ref = useRef(null);
   const [quantity, setQuantity] = useState(1);
   const [currentComments, setCurrentComments] = useState([]);
   const [commentsTotalCount, setCommentsTotalCount] = useState(comments.length);
   const [activeCommentsPage, setActiveCommentsPage] = useState(1);
   const itemsPerPage = 3;
-
+  const [images, setImages] = useState([]);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   // Function-------------------------------
   useEffect(() => {
     setCurrentComments(comments.slice(0, itemsPerPage));
+    setImages([
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+      {
+        original: "/assets/img/example.png",
+        thumbnail: "/assets/img/example.png",
+      },
+    ]);
   }, []);
 
   useEffect(async () => {
@@ -98,7 +130,7 @@ export default function Details({ food, comments }) {
   const handlePageChange = (page) => {
     const queryParams = qs.parse(location.search);
     queryParams.page = page;
-    router.push(`/menu/${food.id}` + qs.stringify(queryParams), undefined, {
+    router.push(`/menu/${food.id}?` + qs.stringify(queryParams), undefined, {
       shallow: true,
     });
     setActiveCommentsPage(page);
@@ -116,15 +148,29 @@ export default function Details({ food, comments }) {
           </span>
 
           <div className=" bg-white p-12 rounded-3xl mb-10">
-            <div className="grid grid-cols-12 gap-5">
-              <div className="col-span-6">
-                <Image
-                  src="/assets/img/bus.png"
-                  width={550}
-                  height={666}
-                ></Image>
+            <div className="grid grid-cols-12 gap-5 ">
+              <div className="col-span-6 bg-product-image-container-color p-4">
+                <ImageGallery
+                  items={images}
+                  autoPlay={true}
+                  slideInterval={6000}
+                  slideDuration={500}
+                  showPlayButton={false}
+                  showBullets={true}
+                  showNav={false}
+                  showFullscreenButton={false}
+                  ref={ref}
+                  onClick={(e) => {
+                    if (!isFullScreen) {
+                      ref.current.fullScreen();
+                      setIsFullScreen(true);
+                    }
+                    ref.current.exitFullScreen();
+                    setIsFullScreen(false);
+                  }}
+                />
               </div>
-              <div className="col-span-6 flex flex-col ">
+              <div className="col-span-6 flex flex-col ml-8  ">
                 <div className="flex justify-end">
                   <Rate
                     defaultValue={5}
@@ -145,18 +191,18 @@ export default function Details({ food, comments }) {
                     {food.title}
                   </h1>
 
-                  <h2 className="font-bold text-4xl text-normal-button-color mt-24">
+                  <h2 className="font-bold text-4xl text-normal-button-color mt-16">
                     Sold: {food.id}
                   </h2>
 
-                  <h2 className="mt-16 font-bold text-4xl ">
+                  <h2 className="mt-8 font-bold text-4xl ">
                     Material:{" "}
                     <p className="font-normal inline-block">
                       beef, egg, sandwich
                     </p>
                   </h2>
 
-                  <span className="flex justify-between mt-16">
+                  <span className="flex justify-between mt-8">
                     <h2 className=" font-bold text-4xl ">Quantity:</h2>
                     <div className="flex w-50 align-i">
                       <span
@@ -188,11 +234,11 @@ export default function Details({ food, comments }) {
                     </div>
                   </span>
 
-                  <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-16">
+                  <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
                     {food.id} USD
                   </span>
 
-                  <button className="bg-cart-button-color text-white w-full py-8 font-bold text-4xl my-16 rounded-xl text-center">
+                  <button className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center">
                     Add cart{" "}
                     <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
                   </button>
@@ -217,7 +263,7 @@ export default function Details({ food, comments }) {
           <div className="bg-white p-12 rounded-3xl">
             <ul>
               {currentComments.map((comment) => (
-                <Comment comment={comment}></Comment>
+                <Comment comment={comment} key={comment.id}></Comment>
               ))}
             </ul>
           </div>

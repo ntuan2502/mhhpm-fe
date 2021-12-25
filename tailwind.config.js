@@ -20,6 +20,7 @@ module.exports = {
         "product-title-color": "#2E112F",
         "cart-button-color": "#F1433A",
         "border-color": "#e8e8e8",
+        "product-image-container-color": "#C4C4C4",
       },
       fontFamily: {
         Kulim_Park_Bold: ["Kulim_Park_Bold"],
@@ -33,6 +34,8 @@ module.exports = {
 
       height: {
         "pagination-button-height": "50px",
+        "product-image-container-height": "660px",
+        "product-image-height": "500px",
       },
 
       border: {
