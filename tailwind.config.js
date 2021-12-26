@@ -21,6 +21,7 @@ module.exports = {
         "cart-button-color": "#F1433A",
         "border-color": "#e8e8e8",
         "product-image-container-color": "#C4C4C4",
+        "cart-background-color": "#f5f5f5",
       },
       fontFamily: {
         Kulim_Park_Bold: ["Kulim_Park_Bold"],

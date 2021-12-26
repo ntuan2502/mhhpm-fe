@@ -207,3 +207,8 @@
   width: 100px;
   height: 100px;
 } */
+
+th,
+td {
+  @apply px-3 py-6;
+}
