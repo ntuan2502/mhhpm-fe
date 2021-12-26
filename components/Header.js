@@ -88,10 +88,13 @@ export default function Header() {
             icon={faHeart}
             className="cursor-pointer"
           ></FontAwesomeIcon>
-          <FontAwesomeIcon
-            icon={faShoppingCart}
-            className="ml-8 cursor-pointer"
-          ></FontAwesomeIcon>
+
+          <Link href="/cart">
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              className="ml-8 cursor-pointer"
+            ></FontAwesomeIcon>
+          </Link>
 
           <span className="w-10 h-10 ml-8">
             <Image
