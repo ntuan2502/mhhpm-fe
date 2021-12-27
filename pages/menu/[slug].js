@@ -70,7 +70,7 @@ export async function getServerSideProps(context) {
 // Client Side-----------------------------------
 
 export default function Details({ food, comments }) {
-  console.log(food);
+  // console.log(food);
   // Variable
   const router = useRouter();
   const ref = useRef(null);
