@@ -99,7 +99,7 @@ export default function Cart() {
   const CalcTotalPrice = () => {
     let sum = 0;
     items.forEach((item) => {
-      sum += item.quantity * item.unitPrice;
+      if (item.choose) sum += item.quantity * item.unitPrice;
     });
     sum = sum - sum * discount;
     return sum;

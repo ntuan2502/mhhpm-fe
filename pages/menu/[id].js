@@ -65,7 +65,17 @@ export default function Details({ food, comments }) {
   const itemsPerPage = 3;
   const [images, setImages] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(10);
   // Function-------------------------------
+
+  const CalcTotalPrice = () => {
+    return quantity * 10;
+  };
+
+  useEffect(() => {
+    setTotalPrice(CalcTotalPrice());
+  }, [quantity]);
+
   useEffect(() => {
     setCurrentComments(comments.slice(0, itemsPerPage));
     setImages([
@@ -235,7 +245,7 @@ export default function Details({ food, comments }) {
                   </span>
 
                   <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
-                    {food.id} USD
+                    {totalPrice} USD
                   </span>
 
                   <button className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center">
