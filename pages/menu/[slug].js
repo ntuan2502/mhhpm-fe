@@ -1,7 +1,7 @@
 // Import-----------------------------
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
-import EventBar from "./../../components/EventBar";
+import EventBar from "../../components/EventBar";
 import axios from "axios";
 import Image from "next/image";
 import Rate from "rc-rate";
@@ -15,46 +15,62 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import qs from "query-string";
 import ImageGallery from "react-image-gallery";
-import Comment from "./../../components/Details/Comment";
+import Comment from "../../components/Details/Comment";
 import { useEffect } from "react";
 import Pagination from "react-js-pagination";
 
 // Fetch data--------------------------------------
-export const getStaticPaths = async () => {
+// export const getStaticPaths = async () => {
+//   const res = await axios.get(
+//     "https://jsonplaceholder.typicode.com/photos?_limit=100"
+//   );
+
+//   const paths = res.data.map((food) => {
+//     return {
+//       params: { id: food.id.toString() },
+//     };
+//   });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// };
+
+// export const getStaticProps = async (context) => {
+//   const id = context.params.id;
+//   const res = await axios.get(
+//     "https://jsonplaceholder.typicode.com/photos/" + id
+//   );
+
+//   const res2 = await axios.get(
+//     "https://jsonplaceholder.typicode.com/comments?postId=" + id
+//   );
+
+//   return {
+//     props: { food: res.data, comments: res2.data },
+//   };
+// };
+
+export async function getServerSideProps(context) {
+  const slug = context.params.slug;
   const res = await axios.get(
-    "https://jsonplaceholder.typicode.com/photos?_limit=100"
-  );
-
-  const paths = res.data.map((food) => {
-    return {
-      params: { id: food.id.toString() },
-    };
-  });
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-export const getStaticProps = async (context) => {
-  const id = context.params.id;
-  const res = await axios.get(
-    "https://jsonplaceholder.typicode.com/photos/" + id
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?slug=${slug}`
   );
 
   const res2 = await axios.get(
-    "https://jsonplaceholder.typicode.com/comments?postId=" + id
+    "https://jsonplaceholder.typicode.com/comments?postId=1"
   );
 
   return {
-    props: { food: res.data, comments: res2.data },
+    props: { food: res.data[0], comments: res2.data },
   };
-};
+}
 
 // Client Side-----------------------------------
 
 export default function Details({ food, comments }) {
+  console.log(food);
   // Variable
   const router = useRouter();
   const ref = useRef(null);
@@ -68,36 +84,14 @@ export default function Details({ food, comments }) {
   // Function-------------------------------
   useEffect(() => {
     setCurrentComments(comments.slice(0, itemsPerPage));
-    setImages([
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-      {
-        original: "/assets/img/example.png",
-        thumbnail: "/assets/img/example.png",
-      },
-    ]);
+    let arrImgs = [];
+    food.images.map((img) => {
+      arrImgs.push({
+        original: img.url,
+        thumbnail: img.formats.thumbnail.url,
+      });
+    });
+    setImages(arrImgs);
   }, []);
 
   useEffect(async () => {
@@ -105,7 +99,7 @@ export default function Details({ food, comments }) {
     const itemOffSet = (activeCommentsPage - 1) * itemsPerPage;
 
     const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/comments?postId=${food.id}&_start=${itemOffSet}&_limit=${itemsPerPage}`
+      `https://jsonplaceholder.typicode.com/comments?postId=1&_start=${itemOffSet}&_limit=${itemsPerPage}`
     );
     const data = await res.data;
     setCurrentComments(data);
@@ -130,7 +124,7 @@ export default function Details({ food, comments }) {
   const handlePageChange = (page) => {
     const queryParams = qs.parse(location.search);
     queryParams.page = page;
-    router.push(`/menu/${food.id}?` + qs.stringify(queryParams), undefined, {
+    router.push(`/menu/${food.slug}?` + qs.stringify(queryParams), undefined, {
       shallow: true,
     });
     setActiveCommentsPage(page);
@@ -143,8 +137,8 @@ export default function Details({ food, comments }) {
         <div className="container mx-auto">
           <span className="flex mb-6">
             <p className="mr-6">Home &gt;</p>
-            <p className="mr-6">Popular &gt;</p>
-            <p className="font-bold">{food.id}</p>
+            {/* <p className="mr-6">Popular &gt;</p> */}
+            <p className="font-bold">{food.name}</p>
           </span>
 
           <div className=" bg-white p-12 rounded-3xl mb-10">
@@ -188,17 +182,17 @@ export default function Details({ food, comments }) {
 
                 <div className="mr-12 mt-6">
                   <h1 className=" font-Haettenschweiler text-7xl text-center text-product-title-color">
-                    {food.title}
+                    {food.name}
                   </h1>
 
                   <h2 className="font-bold text-4xl text-normal-button-color mt-16">
-                    Sold: {food.id}
+                    Sold: 0
                   </h2>
 
                   <h2 className="mt-8 font-bold text-4xl ">
                     Material:{" "}
                     <p className="font-normal inline-block">
-                      beef, egg, sandwich
+                      {food.tags.map((tag) => tag.name)}
                     </p>
                   </h2>
 
@@ -235,7 +229,7 @@ export default function Details({ food, comments }) {
                   </span>
 
                   <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
-                    {food.id} USD
+                    {food.prices} VND
                   </span>
 
                   <button className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center">
@@ -254,8 +248,12 @@ export default function Details({ food, comments }) {
               </div>
               <div className="col-span-9">
                 <p className="product-info">Vietnam</p>
-                <p className="product-info">Food</p>
-                <p className="product-info">beef, egg, sandwich</p>
+                <p className="product-info">
+                  {food.tags.map((tag) => tag.name)}
+                </p>
+                <p className="product-info">
+                  {food.tags.map((tag) => tag.name)}
+                </p>
               </div>
             </div>
           </div>

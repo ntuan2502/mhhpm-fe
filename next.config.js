@@ -1,5 +1,5 @@
 module.exports = {
   images: {
-    domains: ["via.placeholder.com"],
+    domains: ["res.cloudinary.com", "lh3.googleusercontent.com", "via.placeholder.com"],
   },
 };

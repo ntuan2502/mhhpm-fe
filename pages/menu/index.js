@@ -6,13 +6,24 @@ import axios from "axios";
 
 export const getServerSideProps = async (context) => {
   // const res = await axios.get("https://fakestoreapi.com/products/categories");
-  const data = ["Popular", "Food", "Drink", "Vegetable", "Fruit"];
+  const tagsData = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags`
+  );
+  const tags = await tagsData.data;
+  const data = [];
+  const tagsName = [];
+  tags.map((tag) => {
+    data.push(tag.slug);
+    tagsName.push(tag.name);
+  });
+
+  // const data = ["Popular", "Food", "Drink", "Vegetable", "Fruit"];
   let activeCategory = data[0];
   if (context.query.category !== null && context.query.category !== undefined)
     activeCategory = context.query.category;
   console.log(activeCategory);
   const res2 = await axios.get(
-    `https://jsonplaceholder.typicode.com/photos?category=${activeCategory}&_limit=100`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}`
   );
   const totalCount = await res2.data.length;
   const data2 = await res2.data.slice(0, 11);
@@ -20,6 +31,7 @@ export const getServerSideProps = async (context) => {
   // console.log(data);
   return {
     props: {
+      tagsName: tagsName,
       categories: data,
       foods: data2,
       totalCount: totalCount,
@@ -29,6 +41,7 @@ export const getServerSideProps = async (context) => {
 };
 
 export default function Menu({
+  tagsName,
   categories,
   foods,
   totalCount,
@@ -38,6 +51,7 @@ export default function Menu({
     <div className="font-Kulim_Park_Normal">
       <EventBar></EventBar>
       <PaginateMenu
+        tagsName={tagsName}
         categories={categories}
         foods={foods}
         itemsPerPage={12}

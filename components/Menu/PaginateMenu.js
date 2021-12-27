@@ -13,13 +13,14 @@ import {
 import axios from "axios";
 import qs from "query-string";
 export default function PaginateMenu({
+  tagsName,
   categories,
   foods,
   itemsPerPage,
   totalCount,
   activeCategoryProp,
 }) {
-  const [currentItems, setCurrentItems] = useState(foods);
+  const [currentItems, setCurrentItems] = useState(foods[0].foods);
   const [activePage, setActivePage] = useState(1);
   const [activeCategory, setActiveCategory] = useState(activeCategoryProp);
   const router = useRouter();
@@ -48,10 +49,10 @@ export default function PaginateMenu({
     const itemOffSet = (activePage - 1) * itemsPerPage;
 
     const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/photos?category=${activeCategory}&_start=${itemOffSet}&_limit=${itemsPerPage}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}&_start=${itemOffSet}&_limit=${itemsPerPage}`
     );
     const data = await res.data;
-    setCurrentItems(data);
+    setCurrentItems(data[0].foods);
   }, [activePage]);
 
   // Invoke when user click to request another page.
@@ -82,7 +83,7 @@ export default function PaginateMenu({
                     : " text-3xl font-bold mr-10 text-white cursor-pointer"
                 }
               >
-                {category}
+                {tagsName[index]}
               </a>
             </li>
           ))}

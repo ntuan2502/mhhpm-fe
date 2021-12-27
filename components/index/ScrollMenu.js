@@ -9,7 +9,7 @@ export default function ScrollMenu({ foods }) {
   const fetchMoreData = async () => {
     setLoading(true);
     const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/photos?_start=${props.length}&_limit=8`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_start=${props.length}&_limit=8`
     );
     const data = await res.data;
     if (data.length <= 0) {

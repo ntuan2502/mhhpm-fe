@@ -3,22 +3,22 @@ import Link from "next/link";
 import Slider from "../components/index/Slider";
 import { useState } from "react";
 import { useEffect } from "react";
-import ScrollMenu from "./../components/index/ScrollMenu";
+import ScrollMenu from "../components/index/ScrollMenu";
 import axios from "axios";
-import EventBar from "./../components/EventBar";
+import EventBar from "../components/EventBar";
 
-export const getStaticProps = async () => {
+export async function getServerSideProps(ctx) {
   const res = await axios.get(
-    "https://jsonplaceholder.typicode.com/photos?_limit=8"
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_limit=8`
   );
-  const data = await res.data;
-  // console.log(data);
+  const foods = await res.data;
   return {
-    props: { foods: data },
+    props: { foods },
   };
-};
+}
 
 export default function Home({ foods }) {
+  console.log(foods[0]);
   const [sliderImage, setSliderImage] = useState([]);
   useEffect(() => {
     const slider1 = "/assets/img/slider1.png";

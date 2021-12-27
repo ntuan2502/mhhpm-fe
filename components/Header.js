@@ -5,8 +5,10 @@ import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
+  const { data: session } = useSession();
   const router = useRouter();
   const currentRoute = router.pathname;
 
@@ -94,12 +96,25 @@ export default function Header() {
           ></FontAwesomeIcon>
 
           <span className="w-10 h-10 ml-8">
-            <Image
-              src="/assets/img/user-icon.png"
-              width="100%"
-              height="100%"
-              className="rounded-full cursor-pointer"
-            ></Image>
+            {session ? (
+              <Image
+                src={session.user.image}
+                width="100%"
+                height="100%"
+                className="rounded-full cursor-pointer"
+                onClick={() => signOut()}
+              />
+            ) : (
+              <Image
+                src="/assets/img/user-icon.png"
+                width="100%"
+                height="100%"
+                className="rounded-full cursor-pointer"
+                onClick={() => {
+                  router.push("/login");
+                }}
+              />
+            )}
           </span>
         </div>
       </div>
