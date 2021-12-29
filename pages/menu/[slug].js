@@ -177,15 +177,10 @@ export default function Details({ food, comments }) {
               <div className="col-span-6 flex flex-col ml-8  ">
                 <div className="flex justify-end">
                   <Rate
-                    defaultValue={5}
+                    defaultValue={4.7}
                     style={{ fontSize: 45 }}
                     allowHalf
-                    character={
-                      <FontAwesomeIcon
-                        icon={faStar}
-                        className="text-active-color"
-                      />
-                    }
+                    character={<FontAwesomeIcon icon={faStar} />}
                     disabled={true}
                   />
                 </div>

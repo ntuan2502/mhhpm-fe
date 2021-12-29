@@ -40,9 +40,7 @@ export default function Food({ food }) {
               style={{ fontSize: 30 }}
               allowHalf
               className="user-rate"
-              character={
-                <FontAwesomeIcon icon={faStar} className="text-active-color" />
-              }
+              character={<FontAwesomeIcon icon={faStar} />}
               disabled={true}
             />
             <h2 className="font-bold text-xl">Sold: 0</h2>

@@ -216,3 +216,8 @@ th,
 td {
   @apply px-3 py-6;
 }
+
+.rc-rate-star-half .rc-rate-star-first,
+.rc-rate-star-full .rc-rate-star-second {
+  @apply text-active-color !important;
+}
