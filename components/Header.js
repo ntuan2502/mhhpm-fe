@@ -71,16 +71,28 @@ export default function Header() {
         </ul>
 
         {/* Search */}
-        <div className="h-14 bg-white px-4 py-2 rounded-lg flex items-center pr-28 col-span-4 ml-3">
+        <div className="h-14 bg-white pl-4  rounded-lg flex items-center  col-span-4 ml-3 ">
           <FontAwesomeIcon
             icon={faSearch}
-            className="text-3xl"
+            className="text-3xl search-icon"
           ></FontAwesomeIcon>
           <input
             type="text"
             className="flex-1 border-none outline-none ml-5 text-xl truncate"
             placeholder="Search everything here ..."
+            onFocus={() => {
+              document.querySelector(".search-icon").classList.toggle("hide");
+              document.querySelector(".search-button").classList.toggle("hide");
+            }}
+            onBlur={() => {
+              document.querySelector(".search-icon").classList.toggle("hide");
+              document.querySelector(".search-button").classList.toggle("hide");
+            }}
           />
+
+          <button className="justify-end h-full px-4 bg-category-color text-white search-button hide">
+            Search
+          </button>
         </div>
 
         {/* Profile */}

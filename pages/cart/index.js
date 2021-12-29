@@ -37,8 +37,9 @@ export default function Cart() {
     },
   ]);
 
+  const [totalPriceNoDiscount, setTotalPriceNoDiscount] = useState();
+  const [discount, setDiscount] = useState(10);
   const [totalPrice, setTotalPrice] = useState();
-  const [discount, setDiscount] = useState(0);
 
   const IncreaseQuantity = (index) => {
     // if (quantity === food.stock)
@@ -101,13 +102,13 @@ export default function Cart() {
     items.forEach((item) => {
       if (item.choose) sum += item.quantity * item.unitPrice;
     });
-    sum = sum - sum * discount;
     return sum;
   };
 
   useEffect(() => {
     const sum = CalcTotalPrice();
-    setTotalPrice(sum);
+    setTotalPriceNoDiscount(sum);
+    setTotalPrice((sum -= discount));
   }, [items]);
   // console.log(items);
   return (
@@ -172,7 +173,7 @@ export default function Cart() {
         <div className="ml-10 py-5 bg-cart-background-color px-6 w-[500px]">
           <div className="flex justify-between">
             <p className="font-bold">Total</p>
-            <p>{totalPrice}</p>
+            <p>{totalPriceNoDiscount}</p>
           </div>
 
           <div className="flex justify-between items-center mt-8">
@@ -180,7 +181,7 @@ export default function Cart() {
             <p>{discount}</p>
           </div>
           <p className="text-right py-2 border-t-2 border-border-color mt-6">
-            83$
+            {totalPrice}$
           </p>
         </div>
       </div>

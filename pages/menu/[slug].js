@@ -239,7 +239,10 @@ export default function Details({ food, comments }) {
                   </span>
 
                   <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
-                    {totalPrice} VND
+                    {parseInt(totalPrice).toLocaleString("it-IT", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
                   </span>
 
                   <button className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center">

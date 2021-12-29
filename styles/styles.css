@@ -36,6 +36,10 @@
   --primary-color: #e87171;
 }
 
+.hide {
+  display: none;
+}
+
 .header {
   background: linear-gradient(180deg, rgba(255, 48, 48, 0.8) 0, #ff8787);
 }

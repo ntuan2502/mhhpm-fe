@@ -49,7 +49,10 @@ export default function Food({ food }) {
           </div>
 
           <h2 className="font-bold text-3xl mt-2 text-price-color text-left">
-            {food.prices} VND
+            {parseInt(food.prices).toLocaleString("it-IT", {
+              style: "currency",
+              currency: "VND",
+            })}
           </h2>
         </div>
       </a>

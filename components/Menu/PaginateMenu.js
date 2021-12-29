@@ -52,7 +52,7 @@ export default function PaginateMenu({
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}&_start=${itemOffSet}&_limit=${itemsPerPage}`
     );
     const data = await res.data;
-    setCurrentItems(data[0].foods);
+    setCurrentItems(data.foods);
   }, [activePage]);
 
   // Invoke when user click to request another page.
