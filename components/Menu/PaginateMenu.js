@@ -49,10 +49,10 @@ export default function PaginateMenu({
     const itemOffSet = (activePage - 1) * itemsPerPage;
 
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}&_start=${itemOffSet}&_limit=${itemsPerPage}`
+      `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
     );
     const data = await res.data;
-    setCurrentItems(data[0].foods);
+    setCurrentItems(data);
   }, [activePage]);
 
   // Invoke when user click to request another page.
@@ -90,10 +90,11 @@ export default function PaginateMenu({
       </ul>
 
       <div className="grid grid-cols-12 gap-5 mt-8  ">
-        {currentItems &&
+        
+        {/* {currentItems &&
           currentItems.map((food) => (
             <Food food={food} key={food.id} activeCategory={activeCategory} />
-          ))}
+          ))} */}
       </div>
 
       <Pagination
