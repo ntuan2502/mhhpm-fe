@@ -1,7 +1,7 @@
 import React from "react";
 import EventBar from "./../../components/EventBar";
 import PaginateMenu from "./../../components/Menu/PaginateMenu";
-
+import { limit } from "../../config/setting";
 import axios from "axios";
 
 export const getServerSideProps = async (context) => {
@@ -26,7 +26,7 @@ export const getServerSideProps = async (context) => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}`
   );
   const totalCount = await res2.data[0].foods.length;
-  const data2 = await res2.data[0].foods.slice(0, 11);
+  const data2 = await res2.data[0].foods.slice(0, limit - 1);
 
   // console.log(data2);
   return {
@@ -54,7 +54,7 @@ export default function Menu({
         tagsName={tagsName}
         categories={categories}
         foods={foods}
-        itemsPerPage={12}
+        itemsPerPage={limit()}
         totalCount={totalCount}
         activeCategoryProp={activeCategoryProp}
       ></PaginateMenu>

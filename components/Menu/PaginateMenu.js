@@ -54,6 +54,7 @@ export default function PaginateMenu({
     const data = await res.data;
     setCurrentItems(data.foods);
   }, [activePage]);
+  // console.log(currentItems)
 
   // Invoke when user click to request another page.
   const handlePageChange = (page) => {
