@@ -36,4 +36,9 @@ export default NextAuth({
       return session;
     },
   },
+  secret: "f35300bcf8c734e9816068b79b702ae6",
+  jwt: {
+    secret: "f35300bcf8c734e9816068b79b702ae6",
+    encryption: true,
+  },
 });
