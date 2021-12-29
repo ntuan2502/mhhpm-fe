@@ -20,7 +20,7 @@ export default function PaginateMenu({
   totalCount,
   activeCategoryProp,
 }) {
-  const [currentItems, setCurrentItems] = useState(foods[0].foods);
+  const [currentItems, setCurrentItems] = useState(foods?.[0]?.foods);
   const [activePage, setActivePage] = useState(1);
   const [activeCategory, setActiveCategory] = useState(activeCategoryProp);
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function PaginateMenu({
       setActiveCategory(categoryQuery);
     }
     if (pageQuery !== null) {
-      console.log(pageQuery);
+      // console.log(pageQuery);
       setActivePage(parseInt(pageQuery));
     }
   }, []);
@@ -52,7 +52,7 @@ export default function PaginateMenu({
       `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
     );
     const data = await res.data;
-    setCurrentItems(data);
+    setCurrentItems(data.foods);
   }, [activePage]);
 
   // Invoke when user click to request another page.
@@ -90,11 +90,10 @@ export default function PaginateMenu({
       </ul>
 
       <div className="grid grid-cols-12 gap-5 mt-8  ">
-        
-        {/* {currentItems &&
+        {currentItems &&
           currentItems.map((food) => (
             <Food food={food} key={food.id} activeCategory={activeCategory} />
-          ))} */}
+          ))}
       </div>
 
       <Pagination
