@@ -20,7 +20,7 @@ export default function PaginateMenu({
   totalCount,
   activeCategoryProp,
 }) {
-  const [currentItems, setCurrentItems] = useState(foods[0].foods);
+  const [currentItems, setCurrentItems] = useState(foods?.[0]?.foods);
   const [activePage, setActivePage] = useState(1);
   const [activeCategory, setActiveCategory] = useState(activeCategoryProp);
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function PaginateMenu({
       setActiveCategory(categoryQuery);
     }
     if (pageQuery !== null) {
-      console.log(pageQuery);
+      // console.log(pageQuery);
       setActivePage(parseInt(pageQuery));
     }
   }, []);
@@ -49,11 +49,12 @@ export default function PaginateMenu({
     const itemOffSet = (activePage - 1) * itemsPerPage;
 
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}&_start=${itemOffSet}&_limit=${itemsPerPage}`
+      `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
     );
     const data = await res.data;
     setCurrentItems(data.foods);
   }, [activePage]);
+  // console.log(currentItems)
 
   // Invoke when user click to request another page.
   const handlePageChange = (page) => {

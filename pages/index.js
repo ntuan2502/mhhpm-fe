@@ -18,7 +18,6 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home({ foods }) {
-  console.log(foods[0]);
   const [sliderImage, setSliderImage] = useState([]);
   useEffect(() => {
     const slider1 = "/assets/img/slider1.png";
