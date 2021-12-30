@@ -19,6 +19,7 @@ export default function PaginateMenu({
   itemsPerPage,
   totalCount,
   activeCategoryProp,
+  keyword,
 }) {
   const [currentItems, setCurrentItems] = useState(foods?.[0]?.foods);
   const [activePage, setActivePage] = useState(1);
@@ -48,9 +49,17 @@ export default function PaginateMenu({
     // Fetch items from another resources.
     const itemOffSet = (activePage - 1) * itemsPerPage;
 
-    const res = await axios.get(
-      `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
-    );
+    let res;
+    if (keyword === null || keyword === undefined) {
+      res = await axios.get(
+        `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
+      );
+    } else {
+      res = await axios.get(
+        `/api/search?keyword=${keyword}&start=${itemOffSet}&limit=${itemsPerPage}`
+      );
+    }
+
     const data = await res.data;
     setCurrentItems(data.foods);
   }, [activePage]);
@@ -60,9 +69,15 @@ export default function PaginateMenu({
   const handlePageChange = (page) => {
     const queryParams = qs.parse(location.search);
     queryParams.page = page;
-    router.push("/menu?" + qs.stringify(queryParams), undefined, {
-      shallow: true,
-    });
+    if (keyword === null || keyword === undefined) {
+      router.push("/menu?" + qs.stringify(queryParams), undefined, {
+        shallow: true,
+      });
+    } else {
+      router.push("/search?" + qs.stringify(queryParams), undefined, {
+        shallow: true,
+      });
+    }
 
     setActivePage(page);
     const container = document.querySelector(".bg-category-color");
@@ -72,9 +87,9 @@ export default function PaginateMenu({
 
   return (
     <div className="container mx-auto my-16">
-      <ul className="bg-category-color w-full h-32 rounded-xl flex items-center px-20">
-        {categories &&
-          categories.map((category, index) => (
+      {categories && (
+        <ul className="bg-category-color w-full h-32 rounded-xl flex items-center px-20">
+          {categories.map((category, index) => (
             <li key={index}>
               <a
                 onClick={() => changeCategory(category, index)}
@@ -88,7 +103,10 @@ export default function PaginateMenu({
               </a>
             </li>
           ))}
-      </ul>
+        </ul>
+      )}
+
+      {/* {!categories && <h1 className="text-center text-4xl font-bold">SEARCH RESULT</h1>} */}
 
       <div className="grid grid-cols-12 gap-5 mt-8  ">
         {currentItems &&

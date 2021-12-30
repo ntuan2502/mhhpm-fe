@@ -12,6 +12,12 @@ export default function Header() {
   const router = useRouter();
   const currentRoute = router.pathname;
 
+  const search = () => {
+    const searchInput = document.querySelector(".search-input").value;
+    const urlString = "/search?keyword=" + searchInput;
+    const url = encodeURI(urlString);
+    window.location = url;
+  };
   return (
     <header className="header w-full h-60 py-6 font-Kulim_Park_Bold">
       <div className="container m-auto grid grid-cols-12 items-center gap-5 -translate-y-3 ">
@@ -78,19 +84,35 @@ export default function Header() {
           ></FontAwesomeIcon>
           <input
             type="text"
-            className="flex-1 border-none outline-none ml-5 text-xl truncate"
+            className="flex-1 border-none outline-none ml-5 text-xl truncate search-input"
             placeholder="Search everything here ..."
-            onFocus={() => {
-              document.querySelector(".search-icon").classList.toggle("hide");
-              document.querySelector(".search-button").classList.toggle("hide");
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                if (event.target.value.length === 0) {
+                  return;
+                } else {
+                  search();
+                  return;
+                }
+              }
             }}
-            onBlur={() => {
-              document.querySelector(".search-icon").classList.toggle("hide");
-              document.querySelector(".search-button").classList.toggle("hide");
+            onChange={(e) => {
+              if (e.target.value.length === 0) {
+                document.querySelector(".search-button").classList.add("hide");
+              } else {
+                document
+                  .querySelector(".search-button")
+                  .classList.remove("hide");
+              }
             }}
           />
 
-          <button className="justify-end h-full px-4 bg-category-color text-white search-button hide">
+          <button
+            onClick={() => {
+              search();
+            }}
+            className="justify-end h-full px-4 bg-category-color text-white search-button hide"
+          >
             Search
           </button>
         </div>
