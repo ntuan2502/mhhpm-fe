@@ -8,8 +8,6 @@ const initState = {
 };
 
 function reducer(state, action) {
-  console.log(state);
-
   switch (action.type) {
     case SET_CART_QUANTITY:
       return {

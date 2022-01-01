@@ -23,14 +23,6 @@ export default function Home({ foods }) {
 
   const [sliderImage, setSliderImage] = useState([]);
   useEffect(() => {
-    const sessionCart = window.sessionStorage.getItem("cart");
-    if (sessionCart) {
-      dispatch(actions.setCart(JSON.parse(sessionCart)));
-      console.log(state);
-    } else {
-      storeToSession("cart", state.cart);
-    }
-
     const slider1 = "/assets/img/slider1.png";
     const slider2 = "/assets/img/slider2.png";
 

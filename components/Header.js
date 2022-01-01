@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
