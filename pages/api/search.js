@@ -10,13 +10,14 @@ export default async function searchAPI(req, res, next) {
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods`
   );
+  // console.log(response.data);
+
   const data = await response.data.filter((item) =>
-    item.slug.includes(keyword.toString())
+    item.slug.toLowerCase().includes(keyword.toLowerCase())
   );
   const totalCount = data.length;
 
   const foods = data.slice(_start, _end);
-  console.log(foods.length);
 
   res.status(200).json({ foods: foods, totalCount: totalCount });
 }

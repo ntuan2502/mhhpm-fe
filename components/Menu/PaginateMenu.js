@@ -21,9 +21,11 @@ export default function PaginateMenu({
   activeCategoryProp,
   keyword,
 }) {
-  const [currentItems, setCurrentItems] = useState(foods?.[0]?.foods);
+  const [currentItems, setCurrentItems] = useState(foods);
   const [activePage, setActivePage] = useState(1);
   const [activeCategory, setActiveCategory] = useState(activeCategoryProp);
+  const [loading, setLoading] = useState(false);
+  const [totalItems, setTotalItems] = useState(totalCount);
   const router = useRouter();
 
   useEffect(async () => {
@@ -42,19 +44,37 @@ export default function PaginateMenu({
   const changeCategory = async (category, index) => {
     // fetch
     // ----------------------
-    window.location = "/menu?category=" + category;
+    // window.location = "/menu?category=" + category;
+    router.push("/menu?category=" + category, undefined, { shallow: true });
+
+    setActiveCategory(category);
+    setLoading(true);
+    const res = await axios.get(`/api/tags?slug=${category}`);
+    setCurrentItems(res.data.foods);
+    setActivePage(1);
+    setTotalItems(res.data.totalCount);
+    setLoading(false);
   };
 
-  useEffect(async () => {
-    // Fetch items from another resources.
+  const fetchDataAgain = async () => {
     const itemOffSet = (activePage - 1) * itemsPerPage;
 
+    console.log(keyword);
     let res;
     if (keyword === null || keyword === undefined) {
+      const container = document.querySelector(".categories");
+      const offsetTop = container.offsetTop;
+      console.log(offsetTop);
+      window.scrollTo(0, offsetTop);
+      setLoading(true);
       res = await axios.get(
         `/api/tags?slug=${activeCategory}&start=${itemOffSet}&limit=${itemsPerPage}`
       );
     } else {
+      const container = document.querySelector(".search-heading");
+      const offsetTop = container.offsetTop;
+      window.scrollTo(0, offsetTop);
+      setLoading(true);
       res = await axios.get(
         `/api/search?keyword=${keyword}&start=${itemOffSet}&limit=${itemsPerPage}`
       );
@@ -62,8 +82,10 @@ export default function PaginateMenu({
 
     const data = await res.data;
     setCurrentItems(data.foods);
-  }, [activePage]);
-  // console.log(currentItems)
+
+    setLoading(false);
+  };
+  // console.log(currentItems);
 
   // Invoke when user click to request another page.
   const handlePageChange = (page) => {
@@ -80,15 +102,13 @@ export default function PaginateMenu({
     }
 
     setActivePage(page);
-    const container = document.querySelector(".bg-category-color");
-    const offsetTop = container.offsetTop;
-    window.scrollTo(0, offsetTop);
+    fetchDataAgain();
   };
 
   return (
-    <div className="container mx-auto my-16">
+    <div className="container mx-auto my-16 min-h-[1750px]">
       {categories && (
-        <ul className="bg-category-color w-full h-32 rounded-xl flex items-center px-20">
+        <ul className="bg-category-color w-full h-32 rounded-xl flex items-center px-20 categories">
           {categories.map((category, index) => (
             <li key={index}>
               <a
@@ -106,19 +126,27 @@ export default function PaginateMenu({
         </ul>
       )}
 
-      {/* {!categories && <h1 className="text-center text-4xl font-bold">SEARCH RESULT</h1>} */}
+      {!categories && (
+        <h1 className="text-center text-4xl font-bold search-heading">
+          SEARCH RESULT
+        </h1>
+      )}
 
-      <div className="grid grid-cols-12 gap-5 mt-8  ">
-        {currentItems &&
-          currentItems.map((food) => (
-            <Food food={food} key={food.id} activeCategory={activeCategory} />
-          ))}
-      </div>
+      {loading ? (
+        <h1 className="text-center text-4xl font-bold mt-8">Loading...</h1>
+      ) : (
+        <div className="grid grid-cols-12 gap-5 mt-8  ">
+          {currentItems &&
+            currentItems.map((food) => (
+              <Food food={food} key={food.id} activeCategory={activeCategory} />
+            ))}
+        </div>
+      )}
 
       <Pagination
         activePage={activePage}
         itemsCountPerPage={itemsPerPage}
-        totalItemsCount={totalCount}
+        totalItemsCount={totalItems}
         pageRangeDisplayed={4}
         onChange={handlePageChange.bind(this)}
         prevPageText={

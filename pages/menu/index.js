@@ -18,15 +18,16 @@ export const getServerSideProps = async (context) => {
   });
 
   // const data = ["Popular", "Food", "Drink", "Vegetable", "Fruit"];
-  let activeCategory = data[0];
-  if (context.query.category !== null && context.query.category !== undefined)
-    activeCategory = context.query.category;
+  const activeCategory = context.query.category ?? data[0];
+
+  const activePage = context.query.page - 1 ?? 0;
+  const start = activePage ? activePage * limit() : 0;
   // console.log(activeCategory);
   const res2 = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/tags?_slug=${activeCategory}`
+    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/tags?slug=${activeCategory}&start=${start}`
   );
-  const totalCount = await res2.data[0].foods.length;
-  const data2 = await res2.data[0].foods.slice(0, limit - 1);
+  const totalCount = await res2.data.totalCount;
+  const data2 = await res2.data.foods;
 
   // console.log(data2);
   return {

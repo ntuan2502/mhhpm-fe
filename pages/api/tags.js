@@ -11,6 +11,7 @@ export default async function tagsAPI(req, res, next) {
   const _end = parseInt(_limit + _start); //12, 24, 36
   const data = await response.data;
   const foods = data?.[0].foods;
+  const totalCount = foods.length;
   const getFoods = foods.slice(_start, _end);
-  res.status(200).json({ foods: getFoods });
+  res.status(200).json({ foods: getFoods, totalCount: totalCount });
 }

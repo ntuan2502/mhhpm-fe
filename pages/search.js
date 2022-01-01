@@ -10,13 +10,16 @@ export const getServerSideProps = async (context) => {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, "-");
-  console.log(keyword);
+
+  const activePage = context.query.page - 1 ?? 0;
+  const start = activePage ? activePage * limit() : 0;
+
   const res = await axios.get(
-    ` ${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/search?keyword=${keyword}`
+    ` ${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/search?keyword=${keyword}&start=${start}`
   );
   const data = res.data.foods;
   const totalCount = await res.data.totalCount;
-  console.log(totalCount);
+  // console.log(totalCount);
 
   return {
     props: { foods: data, totalCount: totalCount, keyword: keyword },
@@ -30,7 +33,7 @@ export default function search({ foods, totalCount, keyword }) {
     <>
       <EventBar />
 
-      <h1 className="text-center text-4xl font-bold mt-4">SEARCH RESULT</h1>
+      {/* <h1 className="text-center text-4xl font-bold mt-4">SEARCH RESULT</h1> */}
 
       {foods.length !== 0 && (
         <PaginateMenu

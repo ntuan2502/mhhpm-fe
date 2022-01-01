@@ -18,6 +18,8 @@ import ImageGallery from "react-image-gallery";
 import Comment from "../../components/Details/Comment";
 import { useEffect } from "react";
 import Pagination from "react-js-pagination";
+import { storeToSession } from "../../lib/SessionStore";
+import { useStore, actions, useSessionStore } from "../../store";
 
 // Fetch data--------------------------------------
 // export const getStaticPaths = async () => {
@@ -82,7 +84,34 @@ export default function Details({ food, comments }) {
   const [images, setImages] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(10);
+  const [state, dispatch] = useStore();
+  const { cart } = state;
+
   // Function-------------------------------
+
+  const addToCart = () => {
+    // const temp = Object.assign({}, cart);
+    const foodDetail = food;
+    foodDetail.quantity = quantity;
+    foodDetail.totalPrice = totalPrice;
+    foodDetail.choose = false;
+    const updateCart = cart;
+    updateCart.quantity += quantity;
+    const index = updateCart.foods.findIndex(
+      (item) => item.id === foodDetail.id
+    );
+    if (index !== -1) {
+      updateCart.foods[index].quantity += quantity;
+      updateCart.foods[index].totalPrice += totalPrice;
+    } else {
+      updateCart.foods.push(foodDetail);
+    }
+
+    dispatch(actions.setCartQuantity(updateCart.quantity));
+    dispatch(actions.setCartFoods(updateCart.foods));
+    storeToSession("cart", state.cart);
+    alert("Add to cart successfully");
+  };
 
   const CalcTotalPrice = () => {
     return quantity * food.prices;
@@ -240,7 +269,10 @@ export default function Details({ food, comments }) {
                     })}
                   </span>
 
-                  <button className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center">
+                  <button
+                    className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center"
+                    onClick={() => addToCart()}
+                  >
                     Add cart{" "}
                     <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
                   </button>

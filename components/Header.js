@@ -6,11 +6,15 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import { useStore, actions } from "../store";
 
 export default function Header() {
   const { data: session } = useSession();
   const router = useRouter();
   const currentRoute = router.pathname;
+
+  const [state, dispatch] = useStore();
+  const { cart } = state;
 
   const search = () => {
     const searchInput = document.querySelector(".search-input").value;
@@ -126,10 +130,16 @@ export default function Header() {
           ></FontAwesomeIcon>
 
           <Link href="/cart">
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              className="ml-8 cursor-pointer"
-            ></FontAwesomeIcon>
+            <div className="relative">
+              <FontAwesomeIcon
+                icon={faShoppingCart}
+                className="ml-8 cursor-pointer"
+              ></FontAwesomeIcon>
+
+              <div className="absolute px-[6px]  rounded-full bottom-5  -right-3 bg-white text-center text-base leading-[22px] text-primary-color ">
+                {cart.quantity}
+              </div>
+            </div>
           </Link>
 
           <span className="w-10 h-10 ml-8">

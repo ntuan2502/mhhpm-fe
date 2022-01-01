@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import ScrollMenu from "../components/index/ScrollMenu";
 import axios from "axios";
 import EventBar from "../components/EventBar";
-
+import { useStore, actions } from "../store";
+import { storeToSession } from "../lib/SessionStore";
 export async function getServerSideProps(ctx) {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_limit=8`
@@ -18,8 +19,18 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home({ foods }) {
+  const [state, dispatch] = useStore();
+
   const [sliderImage, setSliderImage] = useState([]);
   useEffect(() => {
+    const sessionCart = window.sessionStorage.getItem("cart");
+    if (sessionCart) {
+      dispatch(actions.setCart(JSON.parse(sessionCart)));
+      console.log(state);
+    } else {
+      storeToSession("cart", state.cart);
+    }
+
     const slider1 = "/assets/img/slider1.png";
     const slider2 = "/assets/img/slider2.png";
 

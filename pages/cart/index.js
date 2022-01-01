@@ -3,53 +3,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";
 import CartItem from "./../../components/Cart/CartItem";
-
+import { useStore, actions } from "../../store";
+import { storeToSession } from "../../lib/SessionStore";
 export default function Cart() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      quantity: 1,
-      unitPrice: 10,
-      totalPrice: 10,
-      choose: false,
-    },
-
-    {
-      id: 2,
-      title:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      quantity: 1,
-      unitPrice: 10,
-      totalPrice: 10,
-      choose: false,
-    },
-
-    {
-      id: 3,
-      title:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      quantity: 1,
-      unitPrice: 10,
-      totalPrice: 10,
-      choose: true,
-    },
-  ]);
+  const [state, dispatch] = useStore();
+  const cart = state.cart;
+  const items = state.cart.foods;
 
   const [totalPriceNoDiscount, setTotalPriceNoDiscount] = useState();
   const [discount, setDiscount] = useState(10);
   const [totalPrice, setTotalPrice] = useState();
+
+  useEffect(() => {
+    storeToSession("cart", cart);
+  }, [state]);
 
   const IncreaseQuantity = (index) => {
     // if (quantity === food.stock)
     //   return;
 
     const itemsArr = [...items];
+
     itemsArr[index].quantity++;
     itemsArr[index].totalPrice =
-      itemsArr[index].quantity * itemsArr[index].unitPrice;
-    setItems(itemsArr);
+      itemsArr[index].quantity * itemsArr[index].prices;
+
+    const newCartQuantity = cart.quantity + 1;
+    dispatch(actions.setCartQuantity(newCartQuantity));
+    dispatch(actions.setCartFoods(itemsArr));
   };
 
   const DecreaseQuantity = (index) => {
@@ -59,9 +40,11 @@ export default function Cart() {
 
     itemsArr[index].quantity--;
     itemsArr[index].totalPrice =
-      itemsArr[index].quantity * itemsArr[index].unitPrice;
+      itemsArr[index].quantity * itemsArr[index].prices;
+    const newCartQuantity = cart.quantity - 1;
 
-    setItems(itemsArr);
+    dispatch(actions.setCartQuantity(newCartQuantity));
+    dispatch(actions.setCartFoods(itemsArr));
   };
 
   const ToggleChoice = (event, index) => {
@@ -71,7 +54,7 @@ export default function Cart() {
     } else {
       itemsArr[index].choose = false;
     }
-    setItems(itemsArr);
+    dispatch(actions.setCartFoods(itemsArr));
   };
 
   const ToggleChoiceAll = (event) => {
@@ -81,26 +64,42 @@ export default function Cart() {
     } else {
       itemsArr.map((item) => (item.choose = false));
     }
-    console.log(itemsArr);
-    setItems(itemsArr);
+
+    dispatch(actions.setCartFoods(itemsArr));
+  };
+
+  const allChecked = () => {
+    const itemsArr = [...items];
+
+    for (let i = 0; i < itemsArr.length; i++) {
+      if (itemsArr[i].choose === false) return false;
+    }
+    return true;
   };
 
   const Remove = (index) => {
     const itemsArr = [...items];
+    const newCartQuantity = cart.quantity - itemsArr[index].quantity;
     itemsArr.splice(index, 1);
-    setItems(itemsArr);
+    dispatch(actions.setCartFoods(itemsArr));
+    dispatch(actions.setCartQuantity(newCartQuantity));
   };
 
   const RemoveSelected = () => {
     const itemsArr = items.filter((item) => item.choose !== true);
-    console.log(itemsArr);
-    setItems(itemsArr);
+    let newCartQuantity = 0;
+
+    itemsArr.forEach((item) => {
+      newCartQuantity += item.quantity;
+    });
+    dispatch(actions.setCartQuantity(newCartQuantity));
+    dispatch(actions.setCartFoods(itemsArr));
   };
 
   const CalcTotalPrice = () => {
     let sum = 0;
     items.forEach((item) => {
-      if (item.choose) sum += item.quantity * item.unitPrice;
+      if (item.choose) sum += item.totalPrice;
     });
     return sum;
   };
@@ -123,6 +122,7 @@ export default function Cart() {
                 type="checkbox"
                 className="w-8 h-8 align-middle -mt-2 "
                 onChange={(e) => ToggleChoiceAll(e)}
+                checked={allChecked()}
               />
             </th>
             <th className="text-left">All ({items.length} products)</th>

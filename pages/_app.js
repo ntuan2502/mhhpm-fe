@@ -1,6 +1,7 @@
 import Layout from "../components/Layout";
 import "../styles/styles.css";
 import { SessionProvider } from "next-auth/react";
+import { StoreProvider } from "../store";
 
 export default function App({
   Component,
@@ -8,9 +9,11 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <StoreProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </StoreProvider>
     </SessionProvider>
   );
 }

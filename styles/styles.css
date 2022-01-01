@@ -32,6 +32,9 @@
   src: url("/assets/fonts/Haettenschweiler/Haettenschweiler-Regular.ttf");
 }
 
+html {
+  scroll-behavior: smooth;
+}
 :root {
   --primary-color: #e87171;
 }
