@@ -1,6 +1,6 @@
 import Context from "./Context";
 import { useReducer, useEffect } from "react";
-import reducer, { initState } from "./reducer";
+import reducer, { initState } from "./Reducer";
 import { setCart } from "./actions";
 import { getSession } from "next-auth/react";
 import axios from "axios";
