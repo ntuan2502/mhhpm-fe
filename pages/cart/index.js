@@ -141,7 +141,7 @@ export default function Cart() {
             name: "Normal User",
             user: null,
           };
-      bill.totalPrice = totalPrice;
+      bill.total_prices = totalPrice;
       bill.table = "6182616f47b95e1aa042de82";
       bill.session = cart.id;
       bill.status = "pending";
