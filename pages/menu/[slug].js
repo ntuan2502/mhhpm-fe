@@ -18,9 +18,9 @@ import ImageGallery from "react-image-gallery";
 import Comment from "../../components/Details/Comment";
 import { useEffect } from "react";
 import Pagination from "react-js-pagination";
-import { storeToSession } from "../../lib/SessionStore";
-import { useStore, actions, useSessionStore } from "../../store";
-
+import { currencyFormat } from "../../lib/format";
+import { useSelector, useDispatch } from "react-redux";
+import { increaseQuantityByAmount, updateFoods } from "../../redux/cartManage";
 // Fetch data--------------------------------------
 // export const getStaticPaths = async () => {
 //   const res = await axios.get(
@@ -74,6 +74,8 @@ export async function getServerSideProps(context) {
 export default function Details({ food, comments }) {
   // console.log(food);
   // Variable
+  const { cart } = useSelector((state) => state.cartManage);
+  const dispatch = useDispatch();
   const router = useRouter();
   const ref = useRef(null);
   const [quantity, setQuantity] = useState(1);
@@ -84,32 +86,19 @@ export default function Details({ food, comments }) {
   const [images, setImages] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(10);
-  const [state, dispatch] = useStore();
-  const { cart } = state;
 
   // Function-------------------------------
 
   const addToCart = () => {
     // const temp = Object.assign({}, cart);
+
     const foodDetail = food;
     foodDetail.quantity = quantity;
     foodDetail.totalPrice = totalPrice;
     foodDetail.choose = false;
-    const updateCart = cart;
-    updateCart.quantity += quantity;
-    const index = updateCart.foods.findIndex(
-      (item) => item.id === foodDetail.id
-    );
-    if (index !== -1) {
-      updateCart.foods[index].quantity += quantity;
-      updateCart.foods[index].totalPrice += totalPrice;
-    } else {
-      updateCart.foods.push(foodDetail);
-    }
 
-    dispatch(actions.setCartQuantity(updateCart.quantity));
-    dispatch(actions.setCartFoods(updateCart.foods));
-    storeToSession("cart", state.cart);
+    dispatch(increaseQuantityByAmount(quantity));
+    dispatch(updateFoods(foodDetail));
     alert("Add to cart successfully");
   };
 
@@ -263,10 +252,7 @@ export default function Details({ food, comments }) {
                   </span>
 
                   <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
-                    {parseInt(totalPrice).toLocaleString("it-IT", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
+                    {currencyFormat(totalPrice)}
                   </span>
 
                   <button

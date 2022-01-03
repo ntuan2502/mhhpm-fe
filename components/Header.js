@@ -6,16 +6,13 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
-import { useStore, actions } from "../store";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const { data: session } = useSession();
   const router = useRouter();
   const currentRoute = router.pathname;
-
-  const [state, dispatch] = useStore();
-  const { cart } = state;
-
+  const { cart } = useSelector((state) => state.cartManage);
   const search = () => {
     const searchInput = document.querySelector(".search-input").value;
     const urlString = "/search?keyword=" + searchInput;

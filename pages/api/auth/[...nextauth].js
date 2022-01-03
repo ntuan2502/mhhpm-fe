@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
@@ -32,7 +31,6 @@ export default NextAuth({
       session.jwt = token.jwt;
       session.access_token = token.access_token;
       session._user = token.user;
-      // console.log("session: ", session);
       return session;
     },
   },

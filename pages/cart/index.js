@@ -3,34 +3,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";
 import CartItem from "./../../components/Cart/CartItem";
-import { useStore, actions } from "../../store";
-import { storeToSession } from "../../lib/SessionStore";
+import { currencyFormat } from "../../lib/format";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  decreaseQuantity,
+  decreaseQuantityByAmount,
+  increaseQuantity,
+  removeFood,
+  removeSelectedFoods,
+  updateFoods,
+} from "../../redux/cartManage";
+
 export default function Cart() {
-  const [state, dispatch] = useStore();
-  const cart = state.cart;
-  const items = state.cart.foods;
+  const { cart } = useSelector((state) => state.cartManage);
+  const items = cart.foods;
 
   const [totalPriceNoDiscount, setTotalPriceNoDiscount] = useState();
-  const [discount, setDiscount] = useState(10);
+  const [discount, setDiscount] = useState(0);
   const [totalPrice, setTotalPrice] = useState();
-
-  useEffect(() => {
-    storeToSession("cart", cart);
-  }, [state]);
-
+  const dispatch = useDispatch();
   const IncreaseQuantity = (index) => {
-    // if (quantity === food.stock)
-    //   return;
+    // if (quantity === food.stock) return;
 
     const itemsArr = [...items];
-
-    itemsArr[index].quantity++;
-    itemsArr[index].totalPrice =
-      itemsArr[index].quantity * itemsArr[index].prices;
-
-    const newCartQuantity = cart.quantity + 1;
-    dispatch(actions.setCartQuantity(newCartQuantity));
-    dispatch(actions.setCartFoods(itemsArr));
+    const food = { ...itemsArr[index] };
+    food.quantity++;
+    food.totalPrice = food.quantity * food.prices;
+    dispatch(increaseQuantity());
+    dispatch(updateFoods(food));
   };
 
   const DecreaseQuantity = (index) => {
@@ -38,34 +38,39 @@ export default function Cart() {
 
     if (itemsArr[index].quantity === 1) return;
 
-    itemsArr[index].quantity--;
-    itemsArr[index].totalPrice =
-      itemsArr[index].quantity * itemsArr[index].prices;
-    const newCartQuantity = cart.quantity - 1;
-
-    dispatch(actions.setCartQuantity(newCartQuantity));
-    dispatch(actions.setCartFoods(itemsArr));
+    const food = { ...itemsArr[index] };
+    food.quantity--;
+    food.totalPrice = food.quantity * food.prices;
+    dispatch(decreaseQuantity());
+    dispatch(updateFoods(food));
   };
 
   const ToggleChoice = (event, index) => {
     const itemsArr = [...items];
+    const food = { ...itemsArr[index] };
     if (event.target.checked) {
-      itemsArr[index].choose = true;
+      food.choose = true;
     } else {
-      itemsArr[index].choose = false;
+      food.choose = false;
     }
-    dispatch(actions.setCartFoods(itemsArr));
+    dispatch(updateFoods(food));
   };
 
   const ToggleChoiceAll = (event) => {
     const itemsArr = [...items];
     if (event.target.checked) {
-      itemsArr.map((item) => (item.choose = true));
+      itemsArr.map((item) => {
+        const food = { ...item };
+        food.choose = true;
+        dispatch(updateFoods(food));
+      });
     } else {
-      itemsArr.map((item) => (item.choose = false));
+      itemsArr.map((item) => {
+        const food = { ...item };
+        food.choose = false;
+        dispatch(updateFoods(food));
+      });
     }
-
-    dispatch(actions.setCartFoods(itemsArr));
   };
 
   const allChecked = () => {
@@ -79,21 +84,15 @@ export default function Cart() {
 
   const Remove = (index) => {
     const itemsArr = [...items];
-    const newCartQuantity = cart.quantity - itemsArr[index].quantity;
-    itemsArr.splice(index, 1);
-    dispatch(actions.setCartFoods(itemsArr));
-    dispatch(actions.setCartQuantity(newCartQuantity));
+    const food = { ...itemsArr[index] };
+    dispatch(decreaseQuantityByAmount(food.quantity));
+    dispatch(removeFood(food));
   };
 
   const RemoveSelected = () => {
-    const itemsArr = items.filter((item) => item.choose !== true);
-    let newCartQuantity = 0;
-
-    itemsArr.forEach((item) => {
-      newCartQuantity += item.quantity;
-    });
-    dispatch(actions.setCartQuantity(newCartQuantity));
-    dispatch(actions.setCartFoods(itemsArr));
+    const itemsArr = items.filter((item) => item.choose === true);
+    itemsArr.map((item) => dispatch(decreaseQuantityByAmount(item.quantity)));
+    dispatch(removeSelectedFoods());
   };
 
   const CalcTotalPrice = () => {
@@ -107,7 +106,9 @@ export default function Cart() {
   useEffect(() => {
     const sum = CalcTotalPrice();
     setTotalPriceNoDiscount(sum);
-    setTotalPrice((sum -= discount));
+    const totalPricesWithDiscount = sum - discount < 0 ? 0 : sum - discount;
+
+    setTotalPrice(totalPricesWithDiscount);
   }, [items]);
   // console.log(items);
   return (
@@ -173,15 +174,15 @@ export default function Cart() {
         <div className="ml-10 py-5 bg-cart-background-color px-6 w-[500px]">
           <div className="flex justify-between">
             <p className="font-bold">Total</p>
-            <p>{totalPriceNoDiscount}</p>
+            <p>{currencyFormat(totalPriceNoDiscount)}</p>
           </div>
 
           <div className="flex justify-between items-center mt-8">
             <p className="font-bold">Discount</p>
-            <p>{discount}</p>
+            <p>{currencyFormat(discount)}</p>
           </div>
           <p className="text-right py-2 border-t-2 border-border-color mt-6">
-            {totalPrice}$
+            {currencyFormat(totalPrice)}
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";
-
+import { currencyFormat } from "../../lib/format";
 export default function CartItem({
   item,
   ToggleChoice,
@@ -30,7 +30,7 @@ export default function CartItem({
         </span>
       </td>
 
-      <td>{item.prices}</td>
+      <td>{currencyFormat(item.prices)}</td>
       <td>
         {" "}
         <span
@@ -60,7 +60,7 @@ export default function CartItem({
           +
         </span>
       </td>
-      <td>{item.totalPrice}</td>
+      <td>{currencyFormat(item.totalPrice)}</td>
       <td className="p-3">
         <FontAwesomeIcon
           icon={faTrashAlt}

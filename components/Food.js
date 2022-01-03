@@ -5,6 +5,7 @@ import Image from "next/image";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
 import Link from "next/link";
+import { currencyFormat } from "../lib/format";
 export default function Food({ food }) {
   return (
     <Link href={"/menu/" + food.slug}>
@@ -47,10 +48,7 @@ export default function Food({ food }) {
           </div>
 
           <h2 className="font-bold text-3xl mt-2 text-price-color text-left">
-            {parseInt(food.prices).toLocaleString("it-IT", {
-              style: "currency",
-              currency: "VND",
-            })}
+            {currencyFormat(food.prices)}
           </h2>
         </div>
       </a>
