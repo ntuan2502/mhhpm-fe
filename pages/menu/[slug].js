@@ -20,7 +20,10 @@ import { useEffect } from "react";
 import Pagination from "react-js-pagination";
 import { currencyFormat } from "../../lib/format";
 import { useSelector, useDispatch } from "react-redux";
-import { increaseQuantityByAmount, updateFoods } from "../../redux/cartManage";
+import {
+  increaseQuantityByAmount,
+  addFoodsToCart,
+} from "../../redux/cartManage";
 // Fetch data--------------------------------------
 // export const getStaticPaths = async () => {
 //   const res = await axios.get(
@@ -92,13 +95,13 @@ export default function Details({ food, comments }) {
   const addToCart = () => {
     // const temp = Object.assign({}, cart);
 
-    const foodDetail = food;
+    const foodDetail = { ...food };
     foodDetail.quantity = quantity;
     foodDetail.totalPrice = totalPrice;
     foodDetail.choose = false;
 
     dispatch(increaseQuantityByAmount(quantity));
-    dispatch(updateFoods(foodDetail));
+    dispatch(addFoodsToCart(foodDetail));
     alert("Add to cart successfully");
   };
 

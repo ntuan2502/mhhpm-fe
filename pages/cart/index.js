@@ -5,6 +5,9 @@ import Image from "next/image";
 import CartItem from "./../../components/Cart/CartItem";
 import { currencyFormat } from "../../lib/format";
 import { useSelector, useDispatch } from "react-redux";
+import { v4 } from "uuid";
+import axios from "axios";
+import { getSession } from "next-auth/react";
 import {
   decreaseQuantity,
   decreaseQuantityByAmount,
@@ -103,6 +106,14 @@ export default function Cart() {
     return sum;
   };
 
+  const CalcQuantity = () => {
+    let sum = 0;
+    items.forEach((item) => {
+      if (item.choose) sum += item.quantity;
+    });
+    return sum;
+  };
+
   useEffect(() => {
     const sum = CalcTotalPrice();
     setTotalPriceNoDiscount(sum);
@@ -110,7 +121,59 @@ export default function Cart() {
 
     setTotalPrice(totalPricesWithDiscount);
   }, [items]);
-  // console.log(items);
+
+  const createOrder = async () => {
+    const itemsArr = items.filter((item) => item.choose === true);
+    if (itemsArr.length === 0) return;
+
+    const billRes = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills?session=${cart.id}`
+    );
+    let billData = await billRes.data[0];
+    if (!billData) {
+      const session = await getSession();
+      const bill = session
+        ? {
+            name: session.user.name,
+            user: session._user._id,
+          }
+        : {
+            name: "Normal User",
+            user: null,
+          };
+      bill.totalPrice = totalPrice;
+      bill.table = "6182616f47b95e1aa042de82";
+      bill.session = cart.id;
+      bill.status = "pending";
+      bill.bill_details = [];
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills`,
+        bill
+      );
+      billData = await res.data;
+    }
+    // Create bill detail records
+
+    itemsArr.forEach(async (item, index) => {
+      const quantity = item.quantity;
+
+      const billDetailItem = {
+        food: item.id,
+        quantity: quantity,
+        prices: item.totalPrice,
+        bill: billData.id,
+        status: null,
+        description: null,
+      };
+      console.log(billDetailItem);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/bill-details`,
+        billDetailItem
+      );
+      Remove(index);
+    });
+  };
+
   return (
     <div className="container py-24 mx-auto font-Kulim_Park_Normal">
       <h1 className="text-5xl font-bold mb-8">CART</h1>
@@ -187,7 +250,10 @@ export default function Cart() {
         </div>
       </div>
 
-      <button className="text-5xl bold bg-active-button-color text-white float-right px-32 py-3 rounded-sm font-bold">
+      <button
+        className="text-5xl bold bg-active-button-color text-white float-right px-32 py-3 rounded-sm font-bold"
+        onClick={() => createOrder()}
+      >
         Order
       </button>
     </div>

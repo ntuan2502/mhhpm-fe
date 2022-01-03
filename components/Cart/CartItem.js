@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import Image from "next/image";
 import { currencyFormat } from "../../lib/format";
+import Link from "next/link";
 export default function CartItem({
   item,
   ToggleChoice,
@@ -22,12 +23,15 @@ export default function CartItem({
         />
       </td>
 
-      <td className="flex justify-left items-center">
-        {" "}
-        <Image src={item.images[0].url} width={143} height={90}></Image>
-        <span className="w-80 text-3xl font-bold line-clamp-3 ml-8">
-          {item.name}
-        </span>
+      <td>
+        <Link href={"/menu/" + item.slug}>
+          <a className="flex justify-left items-center">
+            <Image src={item.images[0].url} width={143} height={90}></Image>
+            <span className="w-80 text-3xl font-bold line-clamp-3 ml-8">
+              {item.name}
+            </span>
+          </a>
+        </Link>
       </td>
 
       <td>{currencyFormat(item.prices)}</td>

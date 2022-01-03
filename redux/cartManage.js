@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { v4 } from "uuid";
 export const counterSlice = createSlice({
   name: "cartManage",
   initialState: {
     cart: {
+      id: v4(),
       quantity: 0,
       foods: [],
     },
@@ -37,6 +38,17 @@ export const counterSlice = createSlice({
       }
     },
 
+    addFoodsToCart: (state, action) => {
+      const id = action.payload.id;
+      const index = state.cart.foods.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        state.cart.foods[index].quantity += action.payload.quantity;
+        state.cart.foods[index].totalPrice += action.payload.totalPrice;
+      } else {
+        state.cart.foods.push(action.payload);
+      }
+    },
+
     updateCart: (state, action) => {
       state.cart = action.payload;
     },
@@ -64,6 +76,7 @@ export const {
   removeFood,
   decreaseQuantityByAmount,
   removeSelectedFoods,
+  addFoodsToCart,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
