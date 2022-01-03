@@ -24,10 +24,10 @@ module.exports = {
         "cart-background-color": "#f5f5f5",
       },
       fontFamily: {
-        Kulim_Park_Bold: ["Kulim_Park_Bold"],
-        Kulim_Park_Normal: ["Kulim_Park_Normal"],
+        Roboto_Bold: ["Roboto_Bold"],
+        Roboto_Normal: ["Roboto_Normal"],
         Harlow_Solid_Italic: ["Harlow_Solid_Italic"],
-        Haettenschweiler: ["Haettenschweiler"],
+        Anton: ["Anton"],
       },
       width: {
         "pagination-button-width": "50px",

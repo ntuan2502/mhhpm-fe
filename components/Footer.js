@@ -18,7 +18,7 @@ export default function Footer() {
         Back to top
       </a>
 
-      <div className=" container grid grid-cols-12 gap-5 m-auto h-80 py-7  font-Kulim_Park_Normal footer__text--color">
+      <div className=" container grid grid-cols-12 gap-5 m-auto h-80 py-7  font-Roboto_Normal footer__text--color">
         <div className="col-span-3 px-12">
           <h1 className="font-bold text-2xl mb-5 text-black">EzOrder</h1>
           <p className="mb-5">

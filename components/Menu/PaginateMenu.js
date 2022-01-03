@@ -161,7 +161,7 @@ export default function PaginateMenu({
             className="relative left-0.5"
           />
         }
-        innerClass="flex justify-end mt-20 font-Kulim_Park_Normal font-bold "
+        innerClass="flex justify-end mt-20 font-Roboto_Normal font-bold "
         itemClass="w-pagination-button-width h-pagination-button-height bg-normal-button-color ml-6  rounded-full text-white text-3xl "
         itemClassPrev="bg-navigation-button-bg-color text-navigation-text-color"
         itemClassNext="bg-navigation-button-bg-color text-navigation-text-color"

@@ -24,6 +24,7 @@ import {
   increaseQuantityByAmount,
   addFoodsToCart,
 } from "../../redux/cartManage";
+
 // Fetch data--------------------------------------
 // export const getStaticPaths = async () => {
 //   const res = await axios.get(
@@ -89,21 +90,8 @@ export default function Details({ food, comments }) {
   const [images, setImages] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(10);
-
+  const [success, setSuccess] = useState(false);
   // Function-------------------------------
-
-  const addToCart = () => {
-    // const temp = Object.assign({}, cart);
-
-    const foodDetail = { ...food };
-    foodDetail.quantity = quantity;
-    foodDetail.totalPrice = totalPrice;
-    foodDetail.choose = false;
-
-    dispatch(increaseQuantityByAmount(quantity));
-    dispatch(addFoodsToCart(foodDetail));
-    alert("Add to cart successfully");
-  };
 
   const CalcTotalPrice = () => {
     return quantity * food.prices;
@@ -160,11 +148,50 @@ export default function Details({ food, comments }) {
     });
     setActiveCommentsPage(page);
   };
+
+  const addToCart = () => {
+    // const temp = Object.assign({}, cart);
+    const foodDetail = { ...food };
+    foodDetail.quantity = quantity;
+    foodDetail.totalPrice = totalPrice;
+    foodDetail.choose = false;
+
+    dispatch(increaseQuantityByAmount(quantity));
+    dispatch(addFoodsToCart(foodDetail));
+    alert("Add to cart successfully");
+  };
   // Render
   return (
     <>
+      {/* <div className="modal fixed top-0 left-0 right-0 bottom-0 z-10">
+        <div className="modal-overlay absolute w-full h-full"></div>
+        <div
+          className={
+            success
+              ? "modal-body cursor-pointer absolute w-[400px]  px-4 py-5 bg-white shadow-2xl -top-20 left-1/2 flex items-center flex-col -translate-x-1/2 -translate-y-1/2 border border-black z-10 transition-all modal-appear"
+              : "modal-body cursor-pointer absolute w-[400px]  px-4 py-5 bg-white shadow-2xl -top-20 left-1/2 flex items-center flex-col -translate-x-1/2 -translate-y-1/2 border border-black z-10 transition-all"
+          }
+          onClick={() => {
+            document
+              .querySelector(".modal-body")
+              .classList.toggle("modal-appear");
+          }}
+        >
+          <Image
+            src="/assets/img/checked-resize.png"
+            width={80}
+            height={80}
+          ></Image>
+
+          <p className="text-center font-Roboto_Bold mt-4">
+            ADD TO CART SUCCESSFULLY
+          </p>
+        </div>
+      </div> */}
+
       <EventBar></EventBar>
-      <div className="bg-gradient-to-b from-active-button-color font-Kulim_Park_Normal text-3xl py-6">
+
+      <div className="bg-gradient-to-b from-active-button-color font-Roboto_Normal text-3xl py-6">
         <div className="container mx-auto">
           <span className="flex mb-6">
             <p className="mr-6">Home &gt;</p>
@@ -207,7 +234,7 @@ export default function Details({ food, comments }) {
                 </div>
 
                 <div className="mr-12 mt-6">
-                  <h1 className=" font-Haettenschweiler text-7xl text-center text-product-title-color">
+                  <h1 className=" font-Anton text-7xl text-center text-product-title-color leading-[80px]">
                     {food.name}
                   </h1>
 
@@ -215,12 +242,12 @@ export default function Details({ food, comments }) {
                     Sold: 0
                   </h2>
 
-                  <h2 className="mt-8 font-bold text-4xl ">
+                  {/* <h2 className="mt-8 font-bold text-4xl ">
                     Material:{" "}
                     <p className="font-normal inline-block">
                       {food.tags.map((tag) => tag.name)}
                     </p>
-                  </h2>
+                  </h2> */}
 
                   <span className="flex justify-between mt-8">
                     <h2 className=" font-bold text-4xl ">Quantity:</h2>
@@ -273,16 +300,14 @@ export default function Details({ food, comments }) {
               <div className="col-span-3">
                 <p className="product-label">Origin</p>
                 <p className="product-label">Type</p>
-                <p className="product-label">Material</p>
+                <p className="product-label">Description</p>
               </div>
               <div className="col-span-9">
                 <p className="product-info">Vietnam</p>
                 <p className="product-info">
                   {food.tags.map((tag) => tag.name)}
                 </p>
-                <p className="product-info">
-                  {food.tags.map((tag) => tag.name)}
-                </p>
+                <p className="product-info">{food.description}</p>
               </div>
             </div>
           </div>
@@ -313,7 +338,7 @@ export default function Details({ food, comments }) {
                 className="relative left-0.5"
               />
             }
-            innerClass="flex justify-end mt-20 font-Kulim_Park_Normal font-bold "
+            innerClass="flex justify-end mt-20 font-Roboto_Normal font-bold "
             itemClass="w-pagination-button-width h-pagination-button-height bg-normal-button-color ml-6  rounded-full text-white text-3xl "
             itemClassPrev="bg-navigation-button-bg-color text-navigation-text-color"
             itemClassNext="bg-navigation-button-bg-color text-navigation-text-color"

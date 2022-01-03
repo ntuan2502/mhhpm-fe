@@ -20,7 +20,7 @@ export default function Header() {
     window.location = url;
   };
   return (
-    <header className="header w-full h-60 py-6 font-Kulim_Park_Bold">
+    <header className="header w-full h-60 py-6 font-Roboto_Bold">
       <div className="container m-auto grid grid-cols-12 items-center gap-5 -translate-y-3 ">
         {/* logo */}
 

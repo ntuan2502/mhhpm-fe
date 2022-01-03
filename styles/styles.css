@@ -3,16 +3,16 @@
 @tailwind utilities;
 @import "~react-image-gallery/styles/css/image-gallery.css";
 @font-face {
-  font-family: "Kulim_Park_Bold";
-  src: url("/assets/fonts/Kulim_Park/KulimPark-Bold.ttf");
+  font-family: "Roboto_Bold";
+  src: url("/assets/fonts/Roboto/Roboto-Bold.ttf");
   font-style: bold;
   font-weight: 700;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Kulim_Park_Normal";
-  src: url("/assets/fonts/Kulim_Park/KulimPark-Regular.ttf");
+  font-family: "Roboto_Normal";
+  src: url("/assets/fonts/Roboto/Roboto-Regular.ttf");
   font-style: normal;
   font-weight: normal;
   font-display: swap;
@@ -26,10 +26,10 @@
 }
 
 @font-face {
-  font-family: "Haettenschweiler";
+  font-family: "Anton";
   font-style: normal;
   font-weight: normal;
-  src: url("/assets/fonts/Haettenschweiler/Haettenschweiler-Regular.ttf");
+  src: url("/assets/fonts/Anton/Anton-Regular.ttf");
 }
 
 html {
@@ -223,4 +223,14 @@ td {
 .rc-rate-star-half .rc-rate-star-first,
 .rc-rate-star-full .rc-rate-star-second {
   @apply text-active-color !important;
+}
+
+.Toastify__toast-container--top-center {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.modal-appear {
+  top: 50% !important;
 }

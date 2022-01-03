@@ -49,7 +49,7 @@ export default function Menu({
   activeCategoryProp,
 }) {
   return (
-    <div className="font-Kulim_Park_Normal">
+    <div className="font-Roboto_Normal">
       <EventBar></EventBar>
       <PaginateMenu
         tagsName={tagsName}

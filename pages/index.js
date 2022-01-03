@@ -31,11 +31,11 @@ export default function Home({ foods }) {
 
   return (
     <>
-      <div className="index__banner font-Kulim_Park_Normal">
+      <div className="index__banner font-Roboto_Normal">
         <div className=" banner grid grid-cols-12 container m-auto gap-5">
           <div className="banner__introduce col-span-5 flex items-end relative">
             <Image src="/assets/img/bus.png" width={530} height="400"></Image>
-            <span className=" rounded-sm absolute top-6 right-0 bg-white-rgba px-6 py-10  banner__introduce-text font-Kulim_Park_Bold text-center ">
+            <span className=" rounded-sm absolute top-6 right-0 bg-white-rgba px-6 py-10  banner__introduce-text font-Roboto_Bold text-center ">
               <div className="text-center mb-6 mx-auto">
                 <h1 className=" text-5xl mb-2">Super voucher</h1>
                 <h1 className=" text-5xl text-right  ">in now</h1>
@@ -67,7 +67,7 @@ export default function Home({ foods }) {
 
       <EventBar></EventBar>
 
-      <div className="flex justify-between container mx-auto my-20 font-Kulim_Park_Normal px-12 py-4">
+      <div className="flex justify-between container mx-auto my-20 font-Roboto_Normal px-12 py-4">
         <div className="flex">
           <Image src="/assets/img/quality.png" width={65} height={65}></Image>
           <span className="ml-8">

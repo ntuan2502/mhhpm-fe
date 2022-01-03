@@ -175,7 +175,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="container py-24 mx-auto font-Kulim_Park_Normal">
+    <div className="container py-24 mx-auto font-Roboto_Normal">
       <h1 className="text-5xl font-bold mb-8">CART</h1>
 
       <table className="w-full text-3xl font-bold">
