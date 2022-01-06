@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboard,
+  faSearch,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -130,16 +134,25 @@ export default function Header() {
             <div className="relative">
               <FontAwesomeIcon
                 icon={faShoppingCart}
-                className="ml-8 cursor-pointer"
+                className="ml-6 cursor-pointer"
               ></FontAwesomeIcon>
 
-              <div className="absolute px-[6px]  rounded-full bottom-5  -right-3 bg-white text-center text-base leading-[22px] text-primary-color ">
+              <div className="absolute px-[6px]  rounded-full bottom-5  -right-2 bg-white text-center text-base leading-[22px] text-primary-color ">
                 {cart.quantity}
               </div>
             </div>
           </Link>
 
-          <span className="w-10 h-10 ml-8">
+          <Link href="/payment">
+            <div className="relative">
+              <FontAwesomeIcon
+                icon={faClipboard}
+                className="ml-6 cursor-pointer"
+              ></FontAwesomeIcon>
+            </div>
+          </Link>
+
+          <span className="w-10 h-10 ml-6">
             {session ? (
               <Image
                 src={session.user.image}

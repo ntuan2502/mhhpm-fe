@@ -16,8 +16,10 @@ import {
   removeSelectedFoods,
   updateFoods,
 } from "../../redux/cartManage";
+import { useRouter } from "next/router";
 
 export default function Cart() {
+  const router = useRouter();
   const { cart } = useSelector((state) => state.cartManage);
   const items = cart.foods;
 
@@ -25,6 +27,14 @@ export default function Cart() {
   const [discount, setDiscount] = useState(0);
   const [totalPrice, setTotalPrice] = useState();
   const dispatch = useDispatch();
+
+  const onChangeNote = (index, text) => {
+    const itemsArr = [...items];
+    const food = { ...itemsArr[index] };
+    food.user_description = text;
+    dispatch(updateFoods(food));
+  };
+
   const IncreaseQuantity = (index) => {
     // if (quantity === food.stock) return;
 
@@ -144,10 +154,20 @@ export default function Cart() {
       bill.total_prices = totalPrice;
       bill.table = "6182616f47b95e1aa042de82";
       bill.session = cart.id;
-      bill.status = "pending";
       bill.bill_details = [];
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills`,
+        bill
+      );
+      billData = await res.data;
+    }
+    // If bill existed. Updated bill
+    else {
+      const bill = {
+        total_prices: billData.total_prices + totalPrice,
+      };
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills/${billData.id}`,
         bill
       );
       billData = await res.data;
@@ -162,16 +182,17 @@ export default function Cart() {
         quantity: quantity,
         prices: item.totalPrice,
         bill: billData.id,
-        status: null,
-        description: null,
+        status: "pending",
+        description: "",
+        user_description: item.user_description,
       };
-      console.log(billDetailItem);
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/bill-details`,
         billDetailItem
       );
       Remove(index);
     });
+    router.push("/payment");
   };
 
   return (
@@ -193,7 +214,8 @@ export default function Cart() {
             <th>Unit price</th>
             <th>Quantity</th>
             <th>Into money</th>
-            <th className="p-3">
+            <th>User description</th>
+            <th className="pr-3">
               <FontAwesomeIcon
                 icon={faTrashAlt}
                 onClick={() => RemoveSelected()}
@@ -203,7 +225,7 @@ export default function Cart() {
           </tr>
         </thead>
 
-        <tbody className="text-center bg-cart-background-color">
+        <tbody className="text-center bg-cart-background-color font-medium">
           {items.map((item, index) => (
             <CartItem
               item={item}
@@ -213,6 +235,7 @@ export default function Cart() {
               IncreaseQuantity={IncreaseQuantity}
               DecreaseQuantity={DecreaseQuantity}
               Remove={Remove}
+              onChangeNote={onChangeNote}
             ></CartItem>
           ))}
         </tbody>
@@ -251,7 +274,7 @@ export default function Cart() {
       </div>
 
       <button
-        className="text-5xl bold bg-active-button-color text-white float-right px-32 py-3 rounded-sm font-bold"
+        className="text-3xl bold bg-active-button-color text-white float-right px-32 py-3 rounded-sm font-bold"
         onClick={() => createOrder()}
       >
         Order

@@ -225,12 +225,35 @@ td {
   @apply text-active-color !important;
 }
 
-.Toastify__toast-container--top-center {
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+.rc-rate-star.rc-rate-star-zero {
+  color: #c5c5c5;
 }
 
 .modal-appear {
   top: 50% !important;
+}
+
+.payment-btn--disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.reject:after {
+  content: "X";
+  color: white;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  text-align: center;
+}
+
+.accept:after {
+  content: "\2713";
+  color: white;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(10, 218, 152);
+  text-align: center;
 }

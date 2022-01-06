@@ -24,7 +24,9 @@ import {
   increaseQuantityByAmount,
   addFoodsToCart,
 } from "../../redux/cartManage";
+import { ToastContainer, toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 // Fetch data--------------------------------------
 // export const getStaticPaths = async () => {
 //   const res = await axios.get(
@@ -91,6 +93,7 @@ export default function Details({ food, comments }) {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(10);
   const [success, setSuccess] = useState(false);
+  const [note, setNote] = useState("");
   // Function-------------------------------
 
   const CalcTotalPrice = () => {
@@ -155,10 +158,20 @@ export default function Details({ food, comments }) {
     foodDetail.quantity = quantity;
     foodDetail.totalPrice = totalPrice;
     foodDetail.choose = false;
-
+    foodDetail.user_description = note;
+    setNote("");
+    setQuantity(1);
     dispatch(increaseQuantityByAmount(quantity));
     dispatch(addFoodsToCart(foodDetail));
-    alert("Add to cart successfully");
+    toast.success("ADD TO CART SUCCESSFULLY", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
   // Render
   return (
@@ -189,6 +202,17 @@ export default function Details({ food, comments }) {
         </div>
       </div> */}
 
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <EventBar></EventBar>
 
       <div className="bg-gradient-to-b from-active-button-color font-Roboto_Normal text-3xl py-6">
@@ -225,7 +249,7 @@ export default function Details({ food, comments }) {
               <div className="col-span-6 flex flex-col ml-8  ">
                 <div className="flex justify-end">
                   <Rate
-                    defaultValue={4.7}
+                    defaultValue={food.rate}
                     style={{ fontSize: 45 }}
                     allowHalf
                     character={<FontAwesomeIcon icon={faStar} />}
@@ -239,7 +263,7 @@ export default function Details({ food, comments }) {
                   </h1>
 
                   <h2 className="font-bold text-4xl text-normal-button-color mt-16">
-                    Sold: 0
+                    Sold: {food.sold}
                   </h2>
 
                   {/* <h2 className="mt-8 font-bold text-4xl ">
@@ -251,12 +275,12 @@ export default function Details({ food, comments }) {
 
                   <span className="flex justify-between mt-8">
                     <h2 className=" font-bold text-4xl ">Quantity:</h2>
-                    <div className="flex w-50 align-i">
+                    <div className="flex w-50">
                       <span
                         className={
                           quantity === 1
-                            ? "w-10 h-10 border-black border-2 rounded-full text-center select-none box-border"
-                            : "w-10 h-10 border-black border-2 rounded-full  text-center select-none cursor-pointer  "
+                            ? "w-10 h-10 flex items-center justify-center  border-black border-2 rounded-full text-center select-none box-border"
+                            : "w-10 h-10 flex items-center justify-center border-black border-2 rounded-full  text-center select-none cursor-pointer  "
                         }
                         onClick={() => DecreaseQuantity()}
                       >
@@ -271,8 +295,8 @@ export default function Details({ food, comments }) {
                       <span
                         className={
                           quantity === 14
-                            ? "w-10 h-10 bg-active-button-color text-white rounded-full select-none px-3 "
-                            : "w-10 h-10 bg-active-button-color text-white rounded-full select-none px-3 cursor-pointer  "
+                            ? "w-10 h-10 flex items-center justify-center bg-active-button-color text-white rounded-full select-none px-3 "
+                            : "w-10 h-10 flex items-center justify-center bg-active-button-color text-white rounded-full select-none px-3 cursor-pointer  "
                         }
                         onClick={() => IncreaseQuantity()}
                       >
@@ -281,9 +305,25 @@ export default function Details({ food, comments }) {
                     </div>
                   </span>
 
-                  <span className="text-5xl font-bold text-price-color flex justify-end mr-8 mt-8">
+                  <span className="text-5xl font-bold text-price-color flex justify-end mt-8">
                     {currencyFormat(totalPrice)}
                   </span>
+
+                  <label
+                    htmlFor="user_description"
+                    className="font-bold text-3xl"
+                  >
+                    Note:
+                  </label>
+                  <textarea
+                    name=""
+                    id="user_description"
+                    className="border border-black w-full h-[200px] p-4 mt-6 "
+                    value={note}
+                    onChange={(e) => {
+                      setNote(e.target.value);
+                    }}
+                  ></textarea>
 
                   <button
                     className="bg-cart-button-color text-white w-full py-8 font-bold mt-8 text-4xl  rounded-xl text-center"

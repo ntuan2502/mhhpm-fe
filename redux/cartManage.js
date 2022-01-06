@@ -43,6 +43,8 @@ export const counterSlice = createSlice({
       const index = state.cart.foods.findIndex((item) => item.id === id);
       if (index !== -1) {
         state.cart.foods[index].quantity += action.payload.quantity;
+        state.cart.foods[index].user_description =
+          action.payload.user_description;
         state.cart.foods[index].totalPrice += action.payload.totalPrice;
       } else {
         state.cart.foods.push(action.payload);

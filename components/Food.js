@@ -7,6 +7,7 @@ import "rc-rate/assets/index.css";
 import Link from "next/link";
 import { currencyFormat } from "../lib/format";
 export default function Food({ food }) {
+  console.log(food);
   return (
     <Link href={"/menu/" + food.slug}>
       <a className="col-span-3">
@@ -37,14 +38,14 @@ export default function Food({ food }) {
             </li>
           </ul> */}
             <Rate
-              defaultValue={5}
+              defaultValue={food.rate}
               style={{ fontSize: 30 }}
               allowHalf
               className="user-rate"
               character={<FontAwesomeIcon icon={faStar} />}
               disabled={true}
             />
-            <h2 className="font-bold text-xl">Sold: 0</h2>
+            <h2 className="font-bold text-xl">Sold: {food.sold}</h2>
           </div>
 
           <h2 className="font-bold text-3xl mt-2 text-price-color text-left">
