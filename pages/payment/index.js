@@ -109,6 +109,7 @@ export default function index() {
                 <th>Unit price</th>
                 <th>Quantity</th>
                 <th>Into money</th>
+                <th>Staff description</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -121,8 +122,10 @@ export default function index() {
             </tbody>
           </table>
 
-          <div className="flex my-8  text-3xl justify-end ">
-            <div className="ml-10 py-5 bg-cart-background-color px-6 w-[500px]">
+          <div className="flex my-8  text-3xl justify-between">
+            <div></div>
+
+            <div className="ml-10 py-5 bg-cart-background-color px-6 w-[500px] self-end">
               <div className="flex justify-between">
                 <p className="font-bold">Total</p>
                 <p>{currencyFormat(bill.total_prices)}</p>

@@ -28,7 +28,14 @@ export default function CartItem({
       <td>
         <Link href={"/menu/" + item.slug}>
           <a className="flex justify-left items-center">
-            <Image src={item.images[0].url} width={143} height={90}></Image>
+            <div className="w-[100px] h-[100px] relative">
+              <Image
+                src={item.images[0].url}
+                layout="fill"
+                objectFit="cover"
+              ></Image>
+            </div>
+
             <span className="w-48 text-3xl line-clamp-3">{item.name}</span>
           </a>
         </Link>
@@ -69,7 +76,7 @@ export default function CartItem({
       <td>
         <TextareaAutosize
           style={{ boxSizing: "border-box" }}
-          className=" text-center bg-white border border-border-color"
+          className="staff__description text-center bg-white border border-border-color w-[250px]"
           value={item.user_description}
           maxRows={3}
           onChange={(e) => {

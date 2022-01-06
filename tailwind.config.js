@@ -22,6 +22,7 @@ module.exports = {
         "border-color": "#e8e8e8",
         "product-image-container-color": "#C4C4C4",
         "cart-background-color": "#f5f5f5",
+        "layout-color": "rgba(0,0,0,0.3)",
       },
       fontFamily: {
         Roboto_Bold: ["Roboto_Bold"],

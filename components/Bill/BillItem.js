@@ -5,6 +5,8 @@ import Image from "next/image";
 import { currencyFormat } from "../../lib/format";
 import Link from "next/link";
 import { ClipLoader } from "react-spinners";
+import TextareaAutosize from "react-textarea-autosize";
+
 export default function BillItem({ item }) {
   return (
     <tr>
@@ -16,7 +18,7 @@ export default function BillItem({ item }) {
               width={143}
               height={90}
             ></Image>
-            <span className="w-80 line-clamp-3 ml-8">{item.food.name}</span>
+            <span className="w-60 line-clamp-3 ml-8">{item.food.name}</span>
           </a>
         </Link>
       </td>
@@ -33,6 +35,19 @@ export default function BillItem({ item }) {
         />
       </td>
       <td className="text-2xl font-normal">{currencyFormat(item.prices)}</td>
+      <td>
+        <TextareaAutosize
+          style={{ boxSizing: "border-box" }}
+          className="staff__description text-center bg-white border border-border-color w-[250px]"
+          value={item.description}
+          maxRows={3}
+          disabled
+          onChange={(e) => {
+            onChangeNote(index, e.target.value);
+          }}
+          placeholder="empty"
+        />
+      </td>
       <td className="p-3">
         {item.status === "reject" && (
           <input
