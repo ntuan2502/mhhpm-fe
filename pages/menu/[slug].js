@@ -25,40 +25,10 @@ import {
   addFoodsToCart,
 } from "../../redux/cartManage";
 import { ToastContainer, toast } from "react-toastify";
-
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import ReactStars from "react-rating-stars-component";
 import "react-toastify/dist/ReactToastify.css";
-// Fetch data--------------------------------------
-// export const getStaticPaths = async () => {
-//   const res = await axios.get(
-//     "https://jsonplaceholder.typicode.com/photos?_limit=100"
-//   );
-
-//   const paths = res.data.map((food) => {
-//     return {
-//       params: { id: food.id.toString() },
-//     };
-//   });
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
-
-// export const getStaticProps = async (context) => {
-//   const id = context.params.id;
-//   const res = await axios.get(
-//     "https://jsonplaceholder.typicode.com/photos/" + id
-//   );
-
-//   const res2 = await axios.get(
-//     "https://jsonplaceholder.typicode.com/comments?postId=" + id
-//   );
-
-//   return {
-//     props: { food: res.data, comments: res2.data },
-//   };
-// };
 
 export async function getServerSideProps(context) {
   const slug = context.params.slug;
@@ -94,6 +64,9 @@ export default function Details({ food, comments }) {
   const [totalPrice, setTotalPrice] = useState(10);
   const [success, setSuccess] = useState(false);
   const [note, setNote] = useState("");
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+  const { data: session, status } = useSession();
   // Function-------------------------------
 
   const CalcTotalPrice = () => {
@@ -343,16 +316,77 @@ export default function Details({ food, comments }) {
                 <p className="product-label">Description</p>
               </div>
               <div className="col-span-9">
-                <p className="product-info">Vietnam</p>
-                <p className="product-info">
-                  {food.tags.map((tag) => tag.name)}
-                </p>
-                <p className="product-info">{food.description}</p>
+                <div className="product-info">Vietnam</div>
+                <div className="product-info flex">
+                  {food.tags.map((tag, index) => (
+                    <div className="mr-2" key={index}>
+                      {tag.name}
+                      {food.tags.length - 1 == index ? "" : ","}
+                    </div>
+                  ))}
+                </div>
+                <div className="product-info">{food.description}</div>
               </div>
             </div>
           </div>
+          <div className="bg-white px-12 py-6 rounded-3xl">
+            {status === "unauthenticated" ? (
+              <div className="flex justify-center items-center mb-12">
+                Vui lòng
+                <div className="mx-2 text-blue-500">
+                  <Link href={"/login"}>đăng nhập</Link>
+                </div>
+                để gửi đánh giá
+              </div>
+            ) : (
+              <div className="flex pb-6 pl-6">
+                <div className="flex items-center w-1/3">
+                  <img
+                    className="rounded-full h-24 mr-10"
+                    src={session?.user?.image}
+                    alt=""
+                  />
+                  <div className="mx-2">
+                    <div className="flex justify-center items-center">
+                      {session?.user?.name}
+                    </div>
+                    <ReactStars
+                      count={5}
+                      onChange={(new_rating) => setRating(new_rating)}
+                      value={rating}
+                      size={40}
+                      isHalf={true}
+                      emptyIcon={<i className="far fa-star"></i>}
+                      halfIcon={<i className="fa fa-star-half-alt"></i>}
+                      fullIcon={<i className="fa fa-star"></i>}
+                      activeColor="#ffd700"
+                    />
+                  </div>
+                </div>
+                <div className="w-2/3">
+                  <div className="relative">
+                    <textarea
+                      className="border border-black rounded-lg w-full h-[200px] p-4 mt-6"
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      placeholder="Type your comment here"
+                    />
 
-          <div className="bg-white p-12 rounded-3xl">
+                    <div className="absolute bottom-1 right-3">
+                      <button
+                        type="button"
+                        className="bg-blue-500 px-5 py-2 my-4 rounded overflow-hidden focus:outline-none focus:shadow-outline transition ease-out duration-200 bg-teal-400 hover:bg-teal-500 text-white text-2xl"
+                      >
+                        Gửi đánh giá
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <ul>
               {currentComments.map((comment) => (
                 <Comment comment={comment} key={comment.id}></Comment>
