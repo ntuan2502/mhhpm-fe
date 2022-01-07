@@ -27,7 +27,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import ReactStars from "react-rating-stars-component";
 import "react-toastify/dist/ReactToastify.css";
 
 export async function getServerSideProps(context) {
@@ -350,16 +349,12 @@ export default function Details({ food, comments }) {
                     <div className="flex justify-center items-center">
                       {session?.user?.name}
                     </div>
-                    <ReactStars
-                      count={5}
+                    <Rate
+                      defaultValue={rating}
                       onChange={(new_rating) => setRating(new_rating)}
-                      value={rating}
-                      size={40}
-                      isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
+                      className="user-rate"
+                      allowHalf
+                      character={<FontAwesomeIcon icon={faStar} />}
                     />
                   </div>
                 </div>

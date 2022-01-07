@@ -174,31 +174,32 @@ export default function Cart() {
     else {
       const bill = {
         total_prices: billData.total_prices + totalPrice,
+        id: billData.id,
       };
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills/${billData.id}`,
+        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/updateBill`,
         bill
       );
       billData = await res.data;
     }
     // Create bill detail records
 
-    itemsArr.forEach(async (item, index) => {
-      const quantity = item.quantity;
+    for (let index = 0; index < itemsArr.length; ++index) {
+      const quantity = itemsArr[index].quantity;
 
-      const newSold = item.sold + quantity;
-      // window.location = `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods/${item.id}`;
+      const newSold = itemsArr[index].sold + quantity;
+      // window.location = `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods/${itemsArr[index].id}`;
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/updateSold?id=${item.id}&sold=${newSold}`
+        `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/updateSold?id=${itemsArr[index].id}&sold=${newSold}`
       );
       const billDetailItem = {
-        food: item.id,
+        food: itemsArr[index].id,
         quantity: quantity,
-        prices: item.totalPrice,
+        prices: itemsArr[index].totalPrice,
         bill: billData.id,
         status: "pending",
         description: "",
-        user_description: item.user_description,
+        user_description: itemsArr[index].user_description,
       };
       await axios.post(
         `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/createBillDetail`,
@@ -209,11 +210,10 @@ export default function Cart() {
           },
         }
       );
-      Remove(index);
-      setLoading(false);
-      setOrderStatus(true);
-    });
-
+    }
+    RemoveSelected();
+    setLoading(false);
+    setOrderStatus(true);
     // router.push("/payment");
   };
 

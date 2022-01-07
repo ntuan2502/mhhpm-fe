@@ -43,7 +43,7 @@ export default function CartItem({
 
       <td>{currencyFormat(item.prices)}</td>
       <td>
-        <div className="flex">
+        <div className="flex justify-center">
           <span
             className={
               item.quantity === 1
