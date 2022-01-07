@@ -1,3 +1,4 @@
+import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 export default NextAuth({
@@ -31,6 +32,19 @@ export default NextAuth({
       session.jwt = token.jwt;
       session.access_token = token.access_token;
       session._user = token.user;
+
+      const resUser = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${session._user.id}`,
+        {
+          avatarUrl: session.user.image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.jwt}`,
+          },
+        }
+      );
+      // console.log(resUser);
       return session;
     },
   },

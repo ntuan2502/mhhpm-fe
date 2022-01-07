@@ -28,27 +28,36 @@ import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import "react-toastify/dist/ReactToastify.css";
+import { getSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
   const slug = context.params.slug;
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?slug=${slug}`
   );
+  const food = res.data[0];
 
   const res2 = await axios.get(
-    "https://jsonplaceholder.typicode.com/comments?postId=1"
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/comments?_where[food.id]=${food.id}&_sort=createdAt:DESC`
+  );
+  const comments = res2.data;
+
+  const myComment = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/comments?_where[food.id]=${food.id}&[user.id]=${session?._user?.id}`
   );
 
   return {
-    props: { food: res.data[0], comments: res2.data },
+    props: { food, comments, myComment: myComment.data },
   };
 }
 
 // Client Side-----------------------------------
 
-export default function Details({ food, comments }) {
+export default function Details({ food, comments, myComment }) {
   // console.log(food);
   // Variable
+  const { data: session, status } = useSession();
   const { cart } = useSelector((state) => state.cartManage);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -65,8 +74,49 @@ export default function Details({ food, comments }) {
   const [note, setNote] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
-  const { data: session, status } = useSession();
+  const [warningComment, setWarningComment] = useState(false);
+  const [showCommentBox, setShowCommentBox] = useState(
+    myComment?.length == 0 ? true : false
+  );
+  const commentRef = useRef();
+
   // Function-------------------------------
+
+  async function handleSendComment() {
+    setWarningComment(false);
+    if (comment.length < 1) {
+      commentRef.current.focus();
+    } else if (rating == 0) {
+      setWarningComment(true);
+    } else {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/comments`,
+        {
+          stars: rating,
+          value: comment,
+          user: session?._user.id,
+          food: food.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.jwt}`,
+          },
+        }
+      );
+      // console.log(res);
+      setComment("");
+      setRating(0);
+      toast.success("SEND COMMENT SUCCESSFULLY", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
 
   const CalcTotalPrice = () => {
     return quantity * food.prices;
@@ -93,7 +143,7 @@ export default function Details({ food, comments }) {
     const itemOffSet = (activeCommentsPage - 1) * itemsPerPage;
 
     const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/comments?postId=1&_start=${itemOffSet}&_limit=${itemsPerPage}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/comments?_where[food.id]=${food.id}&_sort=createdAt:DESC&_start=${itemOffSet}&_limit=${itemsPerPage}`
     );
     const data = await res.data;
     setCurrentComments(data);
@@ -337,7 +387,7 @@ export default function Details({ food, comments }) {
                 </div>
                 để gửi đánh giá
               </div>
-            ) : (
+            ) : showCommentBox ? (
               <div className="flex pb-6 pl-6">
                 <div className="flex items-center w-1/3">
                   <img
@@ -349,13 +399,24 @@ export default function Details({ food, comments }) {
                     <div className="flex justify-center items-center">
                       {session?.user?.name}
                     </div>
-                    <Rate
-                      defaultValue={rating}
-                      onChange={(new_rating) => setRating(new_rating)}
-                      className="user-rate"
-                      allowHalf
-                      character={<FontAwesomeIcon icon={faStar} />}
-                    />
+                    <div
+                      className={`${
+                        warningComment ? "border-b-4 border-red-500" : ""
+                      } w-max`}
+                    >
+                      <Rate
+                        defaultValue={rating}
+                        onChange={(new_rating) => {
+                          if (new_rating > 0) {
+                            setWarningComment(false);
+                          }
+                          setRating(new_rating);
+                        }}
+                        className="user-rate"
+                        allowHalf
+                        character={<FontAwesomeIcon icon={faStar} />}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="w-2/3">
@@ -366,12 +427,14 @@ export default function Details({ food, comments }) {
                       onChange={(e) => {
                         setComment(e.target.value);
                       }}
+                      ref={commentRef}
                       placeholder="Type your comment here"
                     />
 
                     <div className="absolute bottom-1 right-3">
                       <button
                         type="button"
+                        onClick={() => handleSendComment()}
                         className="bg-blue-500 px-5 py-2 my-4 rounded overflow-hidden focus:outline-none focus:shadow-outline transition ease-out duration-200 bg-teal-400 hover:bg-teal-500 text-white text-2xl"
                       >
                         Gửi đánh giá
@@ -379,6 +442,10 @@ export default function Details({ food, comments }) {
                     </div>
                   </div>
                 </div>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center mb-6 text-blue-500">
+                Bạn đã gửi đánh giá rồi!
               </div>
             )}
 

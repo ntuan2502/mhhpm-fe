@@ -7,7 +7,7 @@ import "rc-rate/assets/index.css";
 import Link from "next/link";
 import { currencyFormat } from "../lib/format";
 export default function Food({ food }) {
-  console.log(food);
+  // console.log(food);
   return (
     <Link href={"/menu/" + food.slug}>
       <a className="col-span-3">
