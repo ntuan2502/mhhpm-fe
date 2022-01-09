@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -6,7 +6,9 @@ import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
 import Link from "next/link";
 import { currencyFormat } from "../lib/format";
+import { avgStars } from "../lib/format";
 export default function Food({ food }) {
+  const [avgStar, setAvgStar] = useState(avgStars(food));
   // console.log(food);
   return (
     <Link href={"/menu/" + food.slug}>
@@ -38,11 +40,16 @@ export default function Food({ food }) {
             </li>
           </ul> */}
             <Rate
-              defaultValue={food.rate}
               style={{ fontSize: 30 }}
-              allowHalf
               className="user-rate"
-              character={<FontAwesomeIcon icon={faStar} />}
+              count={avgStar > 0 ? avgStar : 5}
+              allowHalf
+              character={
+                <FontAwesomeIcon
+                  icon={faStar}
+                  className={`${avgStar > 0 ? "text-active-color" : ""}`}
+                />
+              }
               disabled={true}
             />
             <h2 className="font-bold text-xl">Sold: {food.sold}</h2>

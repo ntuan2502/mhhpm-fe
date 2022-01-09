@@ -23,7 +23,7 @@ export default function Comment({ comment }) {
       <div className="w-60 text-left ml-12">
         <p className="truncate">{comment.user.username}</p>
         <Rate
-          defaultValue={comment.stars}
+          count={comment.stars}
           className="user-rate"
           allowHalf
           character={

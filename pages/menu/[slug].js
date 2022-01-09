@@ -18,7 +18,7 @@ import ImageGallery from "react-image-gallery";
 import Comment from "../../components/Details/Comment";
 import { useEffect } from "react";
 import Pagination from "react-js-pagination";
-import { currencyFormat } from "../../lib/format";
+import { currencyFormat, avgStars } from "../../lib/format";
 import { useSelector, useDispatch } from "react-redux";
 import {
   increaseQuantityByAmount,
@@ -48,14 +48,18 @@ export async function getServerSideProps(context) {
   );
 
   return {
-    props: { food, comments, myComment: myComment.data },
+    props: {
+      food,
+      comments,
+      myComment: myComment.data,
+      avgStar: avgStars(food),
+    },
   };
 }
 
 // Client Side-----------------------------------
 
-export default function Details({ food, comments, myComment }) {
-  // console.log(food);
+export default function Details({ food, comments, myComment, avgStar }) {
   // Variable
   const { data: session, status } = useSession();
   const { cart } = useSelector((state) => state.cartManage);
@@ -115,6 +119,7 @@ export default function Details({ food, comments, myComment }) {
         draggable: true,
         progress: undefined,
       });
+      router.reload();
     }
   }
 
@@ -271,10 +276,15 @@ export default function Details({ food, comments, myComment }) {
               <div className="col-span-6 flex flex-col ml-8  ">
                 <div className="flex justify-end">
                   <Rate
-                    defaultValue={food.rate}
                     style={{ fontSize: 45 }}
+                    count={avgStar > 0 ? avgStar : 5}
                     allowHalf
-                    character={<FontAwesomeIcon icon={faStar} />}
+                    character={
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        className={`${avgStar > 0 ? "text-active-color" : ""}`}
+                      />
+                    }
                     disabled={true}
                   />
                 </div>
@@ -405,7 +415,7 @@ export default function Details({ food, comments, myComment }) {
                       } w-max`}
                     >
                       <Rate
-                        defaultValue={rating}
+                        // defaultValue={rating}
                         onChange={(new_rating) => {
                           if (new_rating > 0) {
                             setWarningComment(false);
@@ -413,7 +423,7 @@ export default function Details({ food, comments, myComment }) {
                           setRating(new_rating);
                         }}
                         className="user-rate"
-                        allowHalf
+                        allowHalf={false}
                         character={<FontAwesomeIcon icon={faStar} />}
                       />
                     </div>

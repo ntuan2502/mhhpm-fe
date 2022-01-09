@@ -11,6 +11,7 @@ export async function getServerSideProps(ctx) {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_limit=8`
   );
   const foods = await res.data;
+
   return {
     props: { foods },
   };
