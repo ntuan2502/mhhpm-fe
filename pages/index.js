@@ -13,7 +13,7 @@ export async function getServerSideProps(ctx) {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_limit=8`
   );
   const foods = await res.data;
-  const tableID = ctx.query.id || null;
+  const tableID = ctx.query.id || "6182611e47b95e1aa042de79";
 
   return {
     props: { foods, tableID },
