@@ -156,7 +156,7 @@ export default function Cart() {
             user: null,
           };
       bill.total_prices = totalPrice;
-      bill.table = "6182616f47b95e1aa042de82";
+      bill.table = cart.table;
       bill.session = cart.id;
       bill.bill_details = [];
       const res = await axios.post(

@@ -7,6 +7,7 @@ export const counterSlice = createSlice({
       id: v4(),
       quantity: 0,
       foods: [],
+      table: null,
     },
   },
   reducers: {
@@ -65,6 +66,10 @@ export const counterSlice = createSlice({
       const newFoods = state.cart.foods.filter((item) => item.choose === false);
       state.cart.foods = newFoods;
     },
+
+    updateTable: (state, action) => {
+      state.cart.table = action.payload;
+    },
   },
 });
 
@@ -79,6 +84,7 @@ export const {
   decreaseQuantityByAmount,
   removeSelectedFoods,
   addFoodsToCart,
+  updateTable,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

@@ -6,19 +6,23 @@ import { useEffect } from "react";
 import ScrollMenu from "../components/index/ScrollMenu";
 import axios from "axios";
 import EventBar from "../components/EventBar";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTable } from "../redux/cartManage";
 export async function getServerSideProps(ctx) {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/foods?_limit=8`
   );
   const foods = await res.data;
+  const tableID = ctx.query.id || null;
 
   return {
-    props: { foods },
+    props: { foods, tableID },
   };
 }
 
-export default function Home({ foods }) {
+export default function Home({ foods, tableID }) {
   const [sliderImage, setSliderImage] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     const slider1 = "/assets/img/slider1.png";
     const slider2 = "/assets/img/slider2.png";
@@ -28,6 +32,7 @@ export default function Home({ foods }) {
 
     const ImageUrl = [slider1, slider2, slider3, slider4];
     setSliderImage(ImageUrl);
+    dispatch(updateTable(tableID));
   }, []);
 
   return (
