@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 export default function Cart() {
   const router = useRouter();
   const { cart } = useSelector((state) => state.cartManage);
+  const { table } = useSelector((state) => state.cartManage);
   const items = cart.foods;
 
   const [totalPriceNoDiscount, setTotalPriceNoDiscount] = useState();
@@ -156,7 +157,7 @@ export default function Cart() {
             user: null,
           };
       bill.total_prices = totalPrice;
-      bill.table = cart.table;
+      bill.table = table;
       bill.session = cart.id;
       bill.bill_details = [];
       const res = await axios.post(
