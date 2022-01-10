@@ -23,12 +23,10 @@ export default function Comment({ comment }) {
       <div className="w-60 text-left ml-12">
         <p className="truncate">{comment.user.username}</p>
         <Rate
-          count={comment.stars}
+          defaultValue={comment.stars}
           className="user-rate"
           allowHalf
-          character={
-            <FontAwesomeIcon icon={faStar} className="text-active-color" />
-          }
+          character={<FontAwesomeIcon icon={faStar} />}
           disabled={true}
         />
       </div>

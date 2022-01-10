@@ -277,14 +277,9 @@ export default function Details({ food, comments, myComment, avgStar }) {
                 <div className="flex justify-end">
                   <Rate
                     style={{ fontSize: 45 }}
-                    count={avgStar > 0 ? avgStar : 5}
+                    defaultValue={avgStar > 0 ? avgStar : 0}
                     allowHalf
-                    character={
-                      <FontAwesomeIcon
-                        icon={faStar}
-                        className={`${avgStar > 0 ? "text-active-color" : ""}`}
-                      />
-                    }
+                    character={<FontAwesomeIcon icon={faStar} />}
                     disabled={true}
                   />
                 </div>

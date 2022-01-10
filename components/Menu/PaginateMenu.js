@@ -56,9 +56,8 @@ export default function PaginateMenu({
     setLoading(false);
   };
 
-  const fetchDataAgain = async () => {
-    const itemOffSet = (activePage - 1) * itemsPerPage;
-
+  const fetchDataAgain = async (page) => {
+    const itemOffSet = (page - 1) * itemsPerPage;
     console.log(keyword);
     let res;
     if (keyword === null || keyword === undefined) {
@@ -73,6 +72,7 @@ export default function PaginateMenu({
     } else {
       const container = document.querySelector(".search-heading");
       const offsetTop = container.offsetTop;
+
       window.scrollTo(0, offsetTop);
       setLoading(true);
       res = await axios.get(
@@ -102,7 +102,7 @@ export default function PaginateMenu({
     }
 
     setActivePage(page);
-    fetchDataAgain();
+    fetchDataAgain(page);
   };
 
   return (

@@ -7,8 +7,8 @@ export const counterSlice = createSlice({
       id: v4(),
       quantity: 0,
       foods: [],
-      table: null,
     },
+    table: null,
   },
   reducers: {
     increaseQuantity: (state) => {
@@ -68,7 +68,7 @@ export const counterSlice = createSlice({
     },
 
     updateTable: (state, action) => {
-      state.cart.table = action.payload;
+      state.table = action.payload;
     },
   },
 });

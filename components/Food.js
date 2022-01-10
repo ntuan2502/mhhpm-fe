@@ -42,14 +42,9 @@ export default function Food({ food }) {
             <Rate
               style={{ fontSize: 30 }}
               className="user-rate"
-              count={avgStar > 0 ? avgStar : 5}
+              defaultValue={avgStar > 0 ? avgStar : 0}
               allowHalf
-              character={
-                <FontAwesomeIcon
-                  icon={faStar}
-                  className={`${avgStar > 0 ? "text-active-color" : ""}`}
-                />
-              }
+              character={<FontAwesomeIcon icon={faStar} />}
               disabled={true}
             />
             <h2 className="font-bold text-xl">Sold: {food.sold}</h2>
