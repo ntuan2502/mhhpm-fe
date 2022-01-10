@@ -23,7 +23,7 @@ export async function getServerSideProps(ctx) {
 export default function Home({ foods, tableID }) {
   const [sliderImage, setSliderImage] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
+  useEffect(async () => {
     const slider1 = "/assets/img/slider1.png";
     const slider2 = "/assets/img/slider2.png";
 
@@ -32,7 +32,11 @@ export default function Home({ foods, tableID }) {
 
     const ImageUrl = [slider1, slider2, slider3, slider4];
     setSliderImage(ImageUrl);
-    dispatch(updateTable(tableID));
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/tables?id=${tableID}`
+    );
+    const data = await res.data;
+    dispatch(updateTable(data[0]));
   }, []);
 
   return (

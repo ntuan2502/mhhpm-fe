@@ -25,6 +25,7 @@ export default function Cart() {
   const { table } = useSelector((state) => state.cartManage);
   const items = cart.foods;
 
+  console.log(table);
   const [totalPriceNoDiscount, setTotalPriceNoDiscount] = useState();
   const [discount, setDiscount] = useState(0);
   const [totalPrice, setTotalPrice] = useState();
@@ -157,7 +158,7 @@ export default function Cart() {
             user: null,
           };
       bill.total_prices = totalPrice;
-      bill.table = table;
+      bill.table = table.id;
       bill.session = cart.id;
       bill.bill_details = [];
       const res = await axios.post(
@@ -200,7 +201,8 @@ export default function Cart() {
         bill: billData.id,
         status: "pending",
         description: "",
-        user_description: itemsArr[index].user_description,
+        user_description:
+          itemsArr[index].user_description + ` --- ${table.name} ---`,
       };
       await axios.post(
         `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/createBillDetail`,
