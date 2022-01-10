@@ -120,7 +120,6 @@ export default function index() {
     // Delete all
     const itemsArr = items.filter((item) => item.status === "reject");
     for (let index = 0; index < itemsArr.length; ++index) {
-      console.log(itemsArr[index]);
       const res = await axios.delete(
         `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/deleteRejectedBillDetail`,
         { data: itemsArr[index] },
@@ -187,8 +186,6 @@ export default function index() {
         handle = setTimeout(async () => {
           await fetchBillAgain();
         }, 3000);
-      } else {
-        setBillStatus("done");
       }
     }
     return () => {
@@ -201,7 +198,6 @@ export default function index() {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/bills/${bill.id}`
     );
     const data = await res.data;
-    console.log(data.status);
     setBillStatus(data.status);
     setBill(data);
   };
@@ -214,6 +210,10 @@ export default function index() {
     };
     dispatch(updateCart(newCart));
     router.push("/payment/" + bill.id);
+  };
+
+  const hidePaymentProcess = () => {
+    setBillStatus(null);
   };
   return (
     <>
@@ -377,6 +377,21 @@ export default function index() {
             <button
               className="mt-10 px-6 py-2 bg-normal-button-color text-white text-2xl"
               onClick={() => printBill()}
+            >
+              Okay
+            </button>
+          </div>
+        </>
+      )}
+
+      {billStatus === "reject" && (
+        <>
+          <div className="modal-layout fixed top-0 bottom-0 left-0 right-0 bg-layout-color"></div>
+          <div className="modal-body ordered--reject bg-white fixed  flex flex-col items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30%] h-[50%]">
+            <h1 className="text-2xl -mt-8">You have paid unsuccessfully</h1>
+            <button
+              className="mt-10 px-6 py-2 bg-normal-button-color text-white text-2xl"
+              onClick={() => hidePaymentProcess()}
             >
               Okay
             </button>
